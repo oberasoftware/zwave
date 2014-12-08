@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="log.pattern" value="%date %-5level %logger{0} - %message%n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="com.oberasoftware" level="info"/>
+    <logger name="com.oberasoftware.home.zwave.SpringBootZWaveTest" level="debug"/>
+    <!--<logger name="com.oberasoftware.home.zwave.core.impl.EventBusImpl" level="debug"/>-->
+
+    <logger name="com.oberasoftware.home.zwave.rules" level="debug"/>
+    <logger name="com.oberasoftware.home.zwave.threading" level="error"/>
+    <logger name="com.oberasoftware.home.zwave.core.utils" level="error"/>
+    <logger name="com.oberasoftware.home.zwave.converter" level="error"/>
+    <logger name="com.oberasoftware.home.zwave.handlers.ApplicationCommandHandler" level="debug"/>
+    <logger name="com.oberasoftware.home.zwave.handlers.NodeEventHandler" level="debug"/>
+    <logger name="com.oberasoftware.home.zwave.handlers.WakeUpHandler" level="debug"/>
+    <logger name="com.oberasoftware.home.zwave.handlers.MainEventHandler" level="debug"/>
+    <logger name="org.springframework" level="info"/>
+
+    <root level="OFF">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
