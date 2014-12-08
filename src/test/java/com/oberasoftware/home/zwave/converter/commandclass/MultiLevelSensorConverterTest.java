@@ -1,9 +1,14 @@
 package com.oberasoftware.home.zwave.converter.commandclass;
 
+import com.oberasoftware.home.zwave.api.events.EventBus;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.handlers.ApplicationCommandHandler;
 import com.oberasoftware.home.zwave.messages.types.CommandClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -11,8 +16,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author renarj
  */
+@RunWith(MockitoJUnitRunner.class)
 public class MultiLevelSensorConverterTest {
     private static final Logger LOG = getLogger(MultiLevelSensorConverterTest.class);
+
+    @Mock
+    private EventBus eventBus;
+
+    @InjectMocks
+    private ApplicationCommandHandler applicationCommandHandler;
 
     @Test
     /**
@@ -23,7 +35,7 @@ public class MultiLevelSensorConverterTest {
         ApplicationCommandEvent event = new ApplicationCommandEvent(4, 1, CommandClass.SENSOR_MULTILEVEL, new byte[] {0x05, 0x04, 0x22, 0x00, 0x6B});
         LOG.debug("Event: {}", event);
 
-        new ApplicationCommandHandler().receive(event);
+        applicationCommandHandler.receive(event);
     }
 
     @Test
