@@ -1,26 +1,23 @@
-Oberasoftware ZWave Library for Java
-=====
+package com.oberasoftware.home.zwave;
 
-We have created an opensource ZWave library supporting controller devices based on the Sigma Designs Serial API. If you have a device
-supporting this Serial API protocol most likely this library will work for you.
+import com.oberasoftware.home.zwave.api.ZWaveSession;
+import com.oberasoftware.home.zwave.api.actions.SwitchAction;
+import com.oberasoftware.home.zwave.api.events.EventListener;
+import com.oberasoftware.home.zwave.api.events.Subscribe;
+import com.oberasoftware.home.zwave.api.events.ZWaveEvent;
+import com.oberasoftware.home.zwave.api.events.devices.DeviceSensorEvent;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.local.LocalZwaveSession;
+import org.slf4j.Logger;
 
-This ZWave library has been tested on the following controllers:
+import java.util.concurrent.TimeUnit;
 
-* Aeon Labs Z-Stick II
-* RaZberry for Raspberry PI
+import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
+import static org.slf4j.LoggerFactory.getLogger;
 
-Most likely but not confirmed works also on:
-
-* Vision USB stick Z-wave
-* Z-Wave.me Z-StickC
-* Sigma UZB ZWave-Plus
-
-
-Code Example
-====
-The following code example shows how to switch on a Switchable item using the local API. Once the light is on, in case it is dimmable we set the level to 50%. Finally we shut the switchable item back off again.
-
-```java
+/**
+ * @author renarj
+ */
 public class LocalZwaveSessionTest {
     private static final Logger LOG = getLogger(LocalZwaveSessionTest.class);
 
@@ -38,6 +35,7 @@ public class LocalZwaveSessionTest {
         LOG.debug("Application startup");
         try {
             ZWaveSession s = new LocalZwaveSession();
+            s.subscribe(new MyEventListener());
 
             while(!s.isNetworkReady()) {
                 LOG.info("Network not ready yet, sleeping");
@@ -65,33 +63,6 @@ public class LocalZwaveSessionTest {
             LOG.error("Error occurred in ZWave processing", e);
         }
     }
-}
-```
-
-With the following code you can for example receive generic events or with the annotated event subscriber we receive sensor events:
-```java
-public class LocalZwaveSessionTest {
-    private static final Logger LOG = getLogger(LocalZwaveSessionTest.class);
-
-    public static void main(String[] args) {
-        LOG.info("Starting Local ZWAVE App");
-
-        doZwaveStuff();
-    }
-
-    /**
-     * Initialises the binding. This is called after the 'updated' method
-     * has been called and all configuration has been passed.
-     */
-    public static void doZwaveStuff() {
-        LOG.debug("Application startup");
-        try {
-            ZWaveSession s = new LocalZwaveSession();
-            s.subscribe(new MyEventListener());
-        } catch (HomeAutomationException e) {
-            LOG.error("Error occurred in ZWave processing", e);
-        }
-    }
 
     private static class MyEventListener implements EventListener<ZWaveEvent> {
 
@@ -106,4 +77,3 @@ public class LocalZwaveSessionTest {
         }
     }
 }
-```

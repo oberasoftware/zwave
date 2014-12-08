@@ -1,0 +1,32 @@
+#Device action converters
+com.oberasoftware.home.zwave.converter.actions.SwitchActionConverter
+
+#Device information action converters
+com.oberasoftware.home.zwave.converter.actions.devices.RequestNodeInfoConverter
+com.oberasoftware.home.zwave.converter.actions.devices.IdentifyNodeActionConverter
+com.oberasoftware.home.zwave.converter.actions.devices.NoOpActionConverter
+com.oberasoftware.home.zwave.converter.actions.devices.NoMoreInformationActionConverter
+com.oberasoftware.home.zwave.converter.actions.devices.DeviceManufactorActionConverter
+com.oberasoftware.home.zwave.converter.actions.devices.BatteryActionConverter
+
+#Sensor receive converters
+com.oberasoftware.home.zwave.converter.commandclass.MultiLevelSensorConverter
+com.oberasoftware.home.zwave.converter.commandclass.BinarySensorConverter
+com.oberasoftware.home.zwave.converter.commandclass.WakeUpConverter
+com.oberasoftware.home.zwave.converter.commandclass.NoOpConverter
+com.oberasoftware.home.zwave.converter.commandclass.BatteryConverter
+com.oberasoftware.home.zwave.converter.commandclass.BasicConverter
+com.oberasoftware.home.zwave.converter.commandclass.DeviceManufactorConverter
+
+#Controller action converters
+com.oberasoftware.home.zwave.converter.actions.controller.ControllerCapabilitiesActionConverter
+com.oberasoftware.home.zwave.converter.actions.controller.ControllerInitialDataActionConverter
+com.oberasoftware.home.zwave.converter.actions.controller.GetControllerIdActionConverter
+
+#Controller receive converters
+com.oberasoftware.home.zwave.converter.controller.SendDataConverter
+com.oberasoftware.home.zwave.converter.controller.ApplicationCommandConverter
+com.oberasoftware.home.zwave.converter.controller.ControllerInformationConverter
+com.oberasoftware.home.zwave.converter.controller.ControllerInitialDataConverter
+com.oberasoftware.home.zwave.converter.controller.IdentifyNodeConverter
+com.oberasoftware.home.zwave.converter.controller.ControllerIdConverter
