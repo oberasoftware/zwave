@@ -59,8 +59,8 @@ public class ZWaveNodeImpl implements ZWaveNode {
                 "nodeId=" + nodeId +
                 ", nodeStatus=" + nodeStatus +
                 ", availability=" + availability +
-                ", nodeInformation=" + (optionalNodeInformation.isPresent() ? optionalNodeInformation.toString() : "") +
-                ", optionalManufacturerInformation=" + (optionalManufacturerInformation.isPresent() ? optionalManufacturerInformation.isPresent() : "") +
+                ", nodeInformation=" + (optionalNodeInformation.isPresent() ? optionalNodeInformation.get().toString() : "") +
+                ", manufacturerInformation=" + (optionalManufacturerInformation.isPresent() ? optionalManufacturerInformation.get().toString() : "") +
                 '}';
     }
 }
