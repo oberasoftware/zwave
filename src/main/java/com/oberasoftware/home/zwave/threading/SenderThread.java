@@ -56,7 +56,7 @@ public class SenderThread extends Thread {
 
                     if (barrier.tryAcquire(1, zWaveResponseTimeout, TimeUnit.MILLISECONDS)) {
                         long responseTime = System.currentTimeMillis() - messageTimeStart;
-                        LOG.debug("Response processed after {} ms.", responseTime);
+                        LOG.error("Response processed after {} ms.", responseTime);
                     } else {
                         if(sendMessage.getRetries() == 0) {
                             sendMessage.incrementRetry();
@@ -94,7 +94,7 @@ public class SenderThread extends Thread {
     }
 
     public void completeTransaction() {
-        LOG.debug("Completing send transaction");
+        LOG.error("Completing send transaction");
         barrier.release();
     }
 

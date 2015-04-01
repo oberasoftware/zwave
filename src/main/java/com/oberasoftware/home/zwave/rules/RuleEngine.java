@@ -1,5 +1,7 @@
 package com.oberasoftware.home.zwave.rules;
 
+import com.oberasoftware.home.zwave.api.ZWaveAction;
+import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 import com.oberasoftware.home.zwave.api.events.EventListener;
 import com.oberasoftware.home.zwave.api.events.EventBus;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
@@ -67,10 +69,15 @@ public class RuleEngine implements EventListener<DeviceEvent> {
         rule.getActions().forEach(a -> {
             LOG.debug("Doing device action: {} for rule: {}", a, rule);
 
-            try {
-                transactionManager.startAction(a);
-            } catch (HomeAutomationException e) {
-                LOG.error("", e);
+            if(a instanceof ZWaveDeviceAction) {
+                try {
+                    transactionManager.startAction((ZWaveAction) a);
+                } catch (HomeAutomationException e) {
+                    LOG.error("", e);
+                }
+            } else {
+                LOG.debug("Non zwave action, sending to event bus: {}", a);
+                eventBus.pushAsync(a);
             }
         });
     }

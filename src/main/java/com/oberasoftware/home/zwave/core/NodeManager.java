@@ -1,7 +1,7 @@
 package com.oberasoftware.home.zwave.core;
 
 
-import com.oberasoftware.home.zwave.api.events.controller.NodeInformationEvent;
+import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public interface NodeManager {
 
     ZWaveNode getNode(int nodeId);
 
-    void setNodeInformation(int nodeId, NodeInformationEvent nodeInformationEvent);
+    void setNodeInformation(int nodeId, NodeIdentifyEvent nodeIdentifyEvent);
 
     void setNodeInformation(int nodeId, ManufactorInfoEvent manufactorInfoEvent);
 

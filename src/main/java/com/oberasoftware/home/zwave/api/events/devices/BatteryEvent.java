@@ -17,6 +17,21 @@ public class BatteryEvent implements DeviceEvent {
     }
 
     @Override
+    public boolean containsValue() {
+        return true;
+    }
+
+    @Override
+    public String valueAsString() {
+        return Integer.toString(getBatteryLevel());
+    }
+
+    @Override
+    public int valueAsInt() {
+        return getBatteryLevel();
+    }
+
+    @Override
     public int getNodeId() {
         return nodeId;
     }

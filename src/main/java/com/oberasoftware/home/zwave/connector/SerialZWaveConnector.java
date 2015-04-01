@@ -52,7 +52,7 @@ public class SerialZWaveConnector implements ControllerConnector {
             CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
             CommPort commPort = portIdentifier.open("zwaveport", 2000);
             this.serialPort = (SerialPort) commPort;
-            this.serialPort.setSerialPortParams(115200,SerialPort.DATABITS_8,SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
+            this.serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
             this.serialPort.enableReceiveThreshold(1);
             this.serialPort.enableReceiveTimeout(ZWAVE_RECEIVE_TIMEOUT);
 

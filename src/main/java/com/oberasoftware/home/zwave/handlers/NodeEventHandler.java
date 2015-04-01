@@ -1,20 +1,20 @@
 package com.oberasoftware.home.zwave.handlers;
 
-import com.oberasoftware.home.zwave.api.events.EventListener;
-import com.oberasoftware.home.zwave.api.events.Subscribe;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.ZWaveController;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.actions.devices.DeviceManufactorAction;
 import com.oberasoftware.home.zwave.api.actions.devices.IdentifyNodeAction;
-import com.oberasoftware.home.zwave.api.actions.devices.NodeNoOpAction;
-import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
+import com.oberasoftware.home.zwave.api.actions.devices.RequestNodeInfoAction;
+import com.oberasoftware.home.zwave.api.events.EventListener;
+import com.oberasoftware.home.zwave.api.events.Subscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerInitialDataEvent;
-import com.oberasoftware.home.zwave.api.events.controller.NodeInformationEvent;
+import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
+import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.NodeStatus;
 import com.oberasoftware.home.zwave.core.utils.EventSupplier;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -61,18 +61,18 @@ public class NodeEventHandler implements EventListener<ControllerInitialDataEven
     }
 
     @Subscribe
-    public void receiveNodeInformation(NodeInformationEvent nodeInformationEvent) {
-        LOG.debug("Received node information: {}", nodeInformationEvent);
+    public void receiveNodeInformation(NodeIdentifyEvent nodeIdentifyEvent) {
+        LOG.debug("Received node information: {}", nodeIdentifyEvent);
 
         if(!nodeInformationRequests.isEmpty()) {
             int nodeId = nodeInformationRequests.poll();
 
-            nodeManager.setNodeInformation(nodeId, nodeInformationEvent);
+            nodeManager.setNodeInformation(nodeId, nodeIdentifyEvent);
             nodeManager.setNodeStatus(nodeId, NodeStatus.IDENTIFIED);
             LOG.debug("Received identity information for node: {}", nodeId);
 
             if(nodeId != zWaveController.getControllerId()) {
-                int callbackId = send(() -> new NodeNoOpAction(nodeId));
+                int callbackId = send(() -> new RequestNodeInfoAction(nodeId));
 
                 outstandingNodeActions.put(callbackId, nodeId);
             } else {

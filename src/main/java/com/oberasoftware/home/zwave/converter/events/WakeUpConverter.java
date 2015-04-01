@@ -1,17 +1,16 @@
-package com.oberasoftware.home.zwave.converter.commandclass;
+package com.oberasoftware.home.zwave.converter.events;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpIntervalReportEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpNoMoreInformationEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpReceivedEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.messages.types.CommandClass;
 import org.slf4j.Logger;
-
-import java.util.Set;
+import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.toHexString;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -19,7 +18,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author renarj
  */
-public class WakeUpConverter implements ZWaveConverter<ApplicationCommandEvent, WakeUpEvent> {
+@Component
+public class WakeUpConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(WakeUpConverter.class);
 
     private static final int WAKE_UP_INTERVAL_SET = 0x04;
@@ -30,13 +30,7 @@ public class WakeUpConverter implements ZWaveConverter<ApplicationCommandEvent, 
     private static final int WAKE_UP_INTERVAL_CAPABILITIES_GET = 0x09;
     private static final int WAKE_UP_INTERVAL_CAPABILITIES_REPORT = 0x0A;
 
-
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(CommandClass.WAKE_UP.getLabel());
-    }
-
-    @Override
+    @SupportsConversion(commandClass = CommandClass.WAKE_UP)
     public WakeUpEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         final byte[] payload = source.getPayload();
         final int command = payload[0];

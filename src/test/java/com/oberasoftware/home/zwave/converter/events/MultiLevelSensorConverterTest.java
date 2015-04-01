@@ -1,4 +1,4 @@
-package com.oberasoftware.home.zwave.converter.commandclass;
+package com.oberasoftware.home.zwave.converter.events;
 
 import com.oberasoftware.home.zwave.api.events.EventBus;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;

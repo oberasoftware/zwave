@@ -1,11 +1,12 @@
 package com.oberasoftware.home.zwave.api.actions.devices;
 
 import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
+import com.oberasoftware.home.zwave.api.ZWaveIntervalAction;
 
 /**
  * @author renarj
  */
-public class BatteryGetAction implements ZWaveDeviceAction {
+public class BatteryGetAction implements ZWaveDeviceAction, ZWaveIntervalAction {
     private final int nodeId;
 
     public BatteryGetAction(int nodeId) {

@@ -1,33 +1,31 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
-import com.oberasoftware.home.zwave.messages.types.CommandClass;
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
-import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
 import com.oberasoftware.home.zwave.core.utils.MessageUtil;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.messages.types.CommandClass;
+import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
+import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Set;
+import static java.util.Arrays.copyOfRange;
 
 /**
  * @author renarj
  */
-public class ApplicationCommandConverter implements ZWaveConverter<ZWaveRawMessage, ApplicationCommandEvent> {
+@Component
+public class ApplicationCommandConverter implements ZWaveConverter {
 
     private static final int DEFAULT_ENDPOINT_ID = 1;
     private static final int MESSAGE_OFFSET = 4;
     private static final int NODE_ID_INDEX = 1;
     private static final int COMMAND_CLASS_INDEX = 3;
 
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(ControllerMessageType.ApplicationCommandHandler.getLabel());
-    }
-
-    @Override
+    @EventSubscribe
+    @SupportsConversion(controllerMessage=ControllerMessageType.ApplicationCommandHandler)
     public ApplicationCommandEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
         int nodeId = source.getMessageByte(NODE_ID_INDEX);
         int commandClassCode = source.getMessageByte(COMMAND_CLASS_INDEX);
@@ -35,6 +33,6 @@ public class ApplicationCommandConverter implements ZWaveConverter<ZWaveRawMessa
 
         byte[] message = source.getMessage();
 
-        return new ApplicationCommandEvent(nodeId, DEFAULT_ENDPOINT_ID, commandClass, Arrays.copyOfRange(message, MESSAGE_OFFSET, message.length));
+        return new ApplicationCommandEvent(nodeId, DEFAULT_ENDPOINT_ID, commandClass, copyOfRange(message, MESSAGE_OFFSET, message.length));
     }
 }

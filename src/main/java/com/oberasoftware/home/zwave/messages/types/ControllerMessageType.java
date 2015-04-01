@@ -72,7 +72,8 @@ public enum ControllerMessageType {
     SendTestFrame(0xBE, "SendTestFrame"),												// Send a test frame to a node
     GetProtocolStatus(0xBF, "GetProtocolStatus"),
     SetPromiscuousMode(0xD0,"SetPromiscuousMode"),										// Set controller into promiscuous mode to listen to all frames
-    PromiscuousApplicationCommandHandler(0xD1,"PromiscuousApplicationCommandHandler");
+    PromiscuousApplicationCommandHandler(0xD1,"PromiscuousApplicationCommandHandler"),
+    NONE(-1, null);
 
     private int key;
     private String label;

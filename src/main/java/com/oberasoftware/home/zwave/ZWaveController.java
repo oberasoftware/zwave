@@ -1,5 +1,8 @@
 package com.oberasoftware.home.zwave;
 
+import com.oberasoftware.home.zwave.api.actions.controller.ControllerCapabilitiesAction;
+import com.oberasoftware.home.zwave.api.actions.controller.ControllerInitialDataAction;
+import com.oberasoftware.home.zwave.api.actions.controller.GetControllerIdAction;
 import com.oberasoftware.home.zwave.api.events.EventListener;
 import com.oberasoftware.home.zwave.api.events.EventBus;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
@@ -42,6 +45,22 @@ public class ZWaveController implements Controller, EventListener<ControllerIdEv
         if(this.connector != null) {
             LOG.info("Disconnecting ZWave controller connector: {}", this.connector);
             this.connector.close();
+        }
+    }
+
+    @Override
+    public void initializeNetwork() {
+        if(!isNetworkReady()) {
+            LOG.info("Starting network discovery");
+            try {
+                send(new ControllerCapabilitiesAction());
+                send(new ControllerInitialDataAction());
+                send(new GetControllerIdAction());
+            } catch (HomeAutomationException e) {
+                LOG.error("Cannot initialize ZWave network", e);
+            }
+        } else {
+            LOG.warn("Cannot reinitialize network, already actively connected");
         }
     }
 

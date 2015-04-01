@@ -2,10 +2,14 @@ package com.oberasoftware.home.zwave.local;
 
 import com.oberasoftware.home.zwave.ZWaveController;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
+import com.oberasoftware.home.zwave.api.ZWaveIntervalAction;
+import com.oberasoftware.home.zwave.api.ZWaveScheduler;
 import com.oberasoftware.home.zwave.api.ZWaveSession;
 import com.oberasoftware.home.zwave.api.events.EventListener;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author renarj
@@ -13,17 +17,17 @@ import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 public class LocalZwaveSession implements ZWaveSession {
 
     public LocalZwaveSession() {
-
+//        LocalSpringContainer.getBean(ZWaveController.class).initializeNetwork();
     }
 
     @Override
     public boolean isNetworkReady() {
-        return LocalSpringContainer.getBean(ZWaveController.class).isNetworkReady();
+        return getController().isNetworkReady();
     }
 
     @Override
     public void subscribe(EventListener eventListener) {
-        LocalSpringContainer.getBean(ZWaveController.class).subscribe(eventListener);
+        getController().subscribe(eventListener);
     }
 
     @Override
@@ -33,11 +37,20 @@ public class LocalZwaveSession implements ZWaveSession {
 
     @Override
     public void doAction(ZWaveAction action) throws HomeAutomationException {
-        LocalSpringContainer.getBean(ZWaveController.class).send(action);
+        getController().send(action);
+    }
+
+    @Override
+    public void schedule(ZWaveIntervalAction action, TimeUnit timeUnit, long interval) {
+        LocalSpringContainer.getBean(ZWaveScheduler.class).schedule(action, timeUnit, interval);
     }
 
     @Override
     public void shutdown() {
         LocalSpringContainer.destroy();
+    }
+
+    private ZWaveController getController() {
+        return LocalSpringContainer.getBean(ZWaveController.class);
     }
 }

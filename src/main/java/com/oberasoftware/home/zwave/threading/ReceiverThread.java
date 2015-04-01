@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.threading;
 
-import com.oberasoftware.home.zwave.api.events.EventBus;
+import com.oberasoftware.base.event.EventBus;
 import com.oberasoftware.home.zwave.connector.SerialZWaveConnector;
 import com.oberasoftware.home.zwave.messages.ByteMessage;
 import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
@@ -49,7 +49,7 @@ public class ReceiverThread extends Thread {
      */
     private void processIncomingMessage(byte[] buffer) {
         ZWaveRawMessage serialMessage = new ZWaveRawMessage(buffer);
-        if (serialMessage.isValid) {
+        if (serialMessage.isValid()) {
             LOG.debug("Message is valid, sending ACK");
             sendResponse(ACK);
         } else {
@@ -57,7 +57,7 @@ public class ReceiverThread extends Thread {
             return;
         }
 
-        eventBus.pushAsync(new MessageReceivedEvent(serialMessage));
+        eventBus.publish(new MessageReceivedEvent(serialMessage));
     }
 
     /**
@@ -121,7 +121,7 @@ public class ReceiverThread extends Thread {
                 case NAK:
                 case CAN:
                     LOG.debug("Received a raw byte message: {}", nextByte);
-                    eventBus.pushAsync(new ByteMessage(nextByte));
+                    eventBus.publish(new ByteMessage(nextByte));
                     break;
                 default:
                     LOG.warn(String.format("Unexpected message 0x%02X, sending NAK", nextByte));

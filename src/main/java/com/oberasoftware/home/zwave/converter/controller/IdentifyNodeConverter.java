@@ -1,30 +1,30 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
-import com.oberasoftware.home.zwave.api.events.controller.NodeInformationEvent;
+import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.messages.types.BasicDeviceClass;
 import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
+import com.oberasoftware.home.zwave.messages.types.GenericDeviceClass;
+import com.oberasoftware.home.zwave.messages.types.SpecificDeviceClass;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.util.Set;
+import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author renarj
  */
-public class IdentifyNodeConverter implements ZWaveConverter<ZWaveRawMessage, NodeInformationEvent> {
+@Component
+public class IdentifyNodeConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(IdentifyNodeConverter.class);
 
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(ControllerMessageType.IdentifyNode.getLabel());
-    }
-
-    @Override
-    public NodeInformationEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
+    @SupportsConversion(controllerMessage = ControllerMessageType.IdentifyNode)
+    public NodeIdentifyEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
         LOG.debug("Handling incoming node information event: {}", source);
 
         byte[] message = source.getMessage();
@@ -34,35 +34,16 @@ public class IdentifyNodeConverter implements ZWaveConverter<ZWaveRawMessage, No
         int version = (message[0] & 0x07) + 1;
         boolean frequentlyListening = (message[1] & 0x60) != 0;
 
-//        ZWaveDeviceClass.Basic basic = ZWaveDeviceClass.Basic.getBasic(incomingMessage.getMessagePayloadByte(3));
-//        if (basic == null) {
-//            LOG.error(String.format("NODE %d: Basic device class 0x%02x not found", nodeId, incomingMessage.getMessagePayloadByte(3)));
-//            return false;
-//        }
-//        LOG.debug(String.format("NODE %d: Basic = %s 0x%02x", nodeId, basic.getLabel(), basic.getKey()));
-//
-//        ZWaveDeviceClass.Generic generic = ZWaveDeviceClass.Generic.getGeneric(incomingMessage.getMessagePayloadByte(4));
-//        if (generic == null) {
-//            LOG.error(String.format("NODE %d: Generic device class 0x%02x not found", nodeId, incomingMessage.getMessagePayloadByte(4)));
-//            return false;
-//        }
-//        LOG.debug(String.format("NODE %d: Generic = %s 0x%02x", nodeId, generic.getLabel(), generic.getKey()));
-//
-//        ZWaveDeviceClass.Specific specific = ZWaveDeviceClass.Specific.getSpecific(generic, incomingMessage.getMessagePayloadByte(5));
-//        if (specific == null) {
-//            LOG.error(String.format("NODE %d: Specific device class 0x%02x not found", nodeId, incomingMessage.getMessagePayloadByte(5)));
-//            return false;
-//        }
-//        LOG.debug(String.format("NODE %d: Specific = %s 0x%02x", nodeId, specific.getLabel(), specific.getKey()));
-//
-//        ZWaveDeviceClass deviceClass = node.getDeviceClass();
-//        deviceClass.setBasicDeviceClass(basic);
-//        deviceClass.setGenericDeviceClass(generic);
-//        deviceClass.setSpecificDeviceClass(specific);
-//
-//        // advance node stage of the current node.
-//        node.advanceNodeStage(NodeStage.PING);
+        BasicDeviceClass basicDeviceClass = BasicDeviceClass.getType(message[3]).get();
+        GenericDeviceClass genericDeviceClass = GenericDeviceClass.getType(message[4]).get();
+        Optional<SpecificDeviceClass> optionalSpecificClass = SpecificDeviceClass.getType(genericDeviceClass, message[5]);
 
-        return new NodeInformationEvent(listening, frequentlyListening, routing, version);
+        LOG.info("Basic device class: {}", basicDeviceClass);
+        LOG.info("Generic device class: {}", genericDeviceClass);
+        LOG.info("Specific device class: {}", optionalSpecificClass);
+
+        SpecificDeviceClass specificDeviceClass = optionalSpecificClass.isPresent() ? optionalSpecificClass.get() : null;
+
+        return new NodeIdentifyEvent(listening, frequentlyListening, routing, version, basicDeviceClass, genericDeviceClass, specificDeviceClass);
     }
 }

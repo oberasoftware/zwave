@@ -1,7 +1,6 @@
 package com.oberasoftware.home.zwave.rules;
 
-import com.oberasoftware.home.zwave.api.ZWaveAction;
-import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
+import com.oberasoftware.home.zwave.api.Action;
 import com.oberasoftware.home.zwave.api.events.devices.DeviceEvent;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class ConditionBuilder {
 
     private List<ConditionSupplier> conditionSuppliers = new ArrayList<>();
 
-    private List<ZWaveAction> actions = new ArrayList<>();
+    private List<Action> actions = new ArrayList<>();
 
     private ConditionBuilder(Predicate<DeviceEvent> devicePredicate) {
         devicePredicates.add(devicePredicate);
@@ -27,17 +26,17 @@ public class ConditionBuilder {
         return new ConditionBuilder(predicate);
     }
 
-    public ConditionBuilder alsoWhen(Predicate<DeviceEvent> predicate) {
+    public ConditionBuilder and(Predicate<DeviceEvent> predicate) {
         devicePredicates.add(predicate);
         return this;
     }
 
-    public <T> ConditionBuilder alsoWhen(Supplier<T> supplier, Predicate<T> predicate) {
+    public <T> ConditionBuilder and(Supplier<T> supplier, Predicate<T> predicate) {
         conditionSuppliers.add(new ConditionSupplier<>(supplier, predicate));
         return this;
     }
 
-    public ConditionBuilder thenDo(ZWaveDeviceAction action) {
+    public ConditionBuilder thenDo(Action action) {
         actions.add(action);
         return this;
     }

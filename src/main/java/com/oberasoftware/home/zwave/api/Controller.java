@@ -7,6 +7,8 @@ import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
  * @author renarj
  */
 public interface Controller {
+    void initializeNetwork();
+
     int getControllerId();
 
     <T> void subscribe(EventListener<T> topicListener);

@@ -1,14 +1,13 @@
-package com.oberasoftware.home.zwave.converter.commandclass;
+package com.oberasoftware.home.zwave.converter.events;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.messages.types.CommandClass;
 import org.slf4j.Logger;
-
-import java.util.Set;
+import org.springframework.stereotype.Component;
 
 import static java.lang.Integer.toHexString;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -16,18 +15,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author renarj
  */
-public class DeviceManufactorConverter implements ZWaveConverter<ApplicationCommandEvent, ManufactorInfoEvent> {
+@Component
+public class DeviceManufactorConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(DeviceManufactorConverter.class);
 
     private static final int MANUFACTURER_SPECIFIC_GET = 0x04;
     private static final int MANUFACTURER_SPECIFIC_REPORT = 0x05;
 
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(CommandClass.MANUFACTURER_SPECIFIC.getLabel());
-    }
-
-    @Override
+    @SupportsConversion(commandClass = CommandClass.MANUFACTURER_SPECIFIC)
     public ManufactorInfoEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Received manufacturer info for node: {}", source.getNodeId());
 

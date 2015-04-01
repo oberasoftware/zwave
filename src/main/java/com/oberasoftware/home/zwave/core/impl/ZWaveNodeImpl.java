@@ -1,11 +1,13 @@
 package com.oberasoftware.home.zwave.core.impl;
 
-import com.oberasoftware.home.zwave.api.events.controller.NodeInformationEvent;
+import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
 import com.oberasoftware.home.zwave.core.NodeAvailability;
 import com.oberasoftware.home.zwave.core.NodeStatus;
 import com.oberasoftware.home.zwave.core.ZWaveNode;
+import com.oberasoftware.home.zwave.messages.types.CommandClass;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,10 +19,10 @@ public class ZWaveNodeImpl implements ZWaveNode {
     private final NodeStatus nodeStatus;
     private final NodeAvailability availability;
 
-    private final Optional<NodeInformationEvent> optionalNodeInformation;
+    private final Optional<NodeIdentifyEvent> optionalNodeInformation;
     private final Optional<ManufactorInfoEvent> optionalManufacturerInformation;
 
-    public ZWaveNodeImpl(int nodeId, NodeStatus nodeStatus, NodeAvailability availability, Optional<NodeInformationEvent> optionalNodeInformation, Optional<ManufactorInfoEvent> optionalManufacturerInformation) {
+    public ZWaveNodeImpl(int nodeId, NodeStatus nodeStatus, NodeAvailability availability, Optional<NodeIdentifyEvent> optionalNodeInformation, Optional<ManufactorInfoEvent> optionalManufacturerInformation) {
         this.nodeId = nodeId;
         this.nodeStatus = nodeStatus;
         this.availability = availability;
@@ -44,13 +46,23 @@ public class ZWaveNodeImpl implements ZWaveNode {
     }
 
     @Override
-    public Optional<NodeInformationEvent> getNodeInformation() {
+    public Optional<NodeIdentifyEvent> getNodeInformation() {
         return optionalNodeInformation;
     }
 
     @Override
     public Optional<ManufactorInfoEvent> getManufactorInfoEvent() {
         return optionalManufacturerInformation;
+    }
+
+    @Override
+    public List<CommandClass> getCommandClasses() {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getEndpoints() {
+        return null;
     }
 
     @Override

@@ -12,8 +12,8 @@ import java.util.function.Function;
  * @author renarj
  */
 @Component
-public class ConverterHandler<S, T> {
-    private static final Logger LOG = LoggerFactory.getLogger(ConverterHandler.class);
+public class ConverterManager<S, T> {
+    private static final Logger LOG = LoggerFactory.getLogger(ConverterManager.class);
 
     private static final ConverterFactory converterFactory = new ConverterFactoryImpl();
 

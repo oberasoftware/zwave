@@ -1,14 +1,15 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerInformationEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.core.utils.MessageUtil;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
 import com.oberasoftware.home.zwave.messages.types.CommandClass;
 import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
-import com.oberasoftware.home.zwave.core.utils.MessageUtil;
-import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,16 +20,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author renarj
  */
-public class ControllerInformationConverter implements ZWaveConverter<ZWaveRawMessage, ControllerInformationEvent> {
+@Component
+public class ControllerInformationConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(ControllerInformationConverter.class);
 
-
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(ControllerMessageType.GetCapabilities.getLabel());
-    }
-
-    @Override
+    @SupportsConversion(controllerMessage = ControllerMessageType.GetCapabilities)
     public ControllerInformationEvent convert(ZWaveRawMessage message) throws HomeAutomationException {
         byte[] payload = message.getMessage();
         LOG.debug("Handle Controller Information reuqest, message length {}", payload.length);

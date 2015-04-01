@@ -87,7 +87,8 @@ public enum CommandClass {
     SILENCE_ALARM(0x9D, "SILENCE_ALARM"),
     SENSOR_CONFIGURATION(0x9E, "SENSOR_CONFIGURATION"),
     MARK(0xEF, "MARK"),
-    NON_INTEROPERABLE(0xF0, "NON_INTEROPERABLE");
+    NON_INTEROPERABLE(0xF0, "NON_INTEROPERABLE"),
+    NONE(-1, null);
 
     private int classCode;
     private String label;

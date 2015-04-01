@@ -1,10 +1,19 @@
 package com.oberasoftware.home.zwave.converter;
 
+import com.oberasoftware.home.zwave.messages.types.CommandClass;
+import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+import static java.util.Arrays.stream;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -16,13 +25,29 @@ public class ConverterFactoryImpl implements ConverterFactory {
 
     private Map<String, ZWaveConverter> converterMap = new HashMap<>();
 
-    public ConverterFactoryImpl() {
-        ServiceLoader<ZWaveConverter> l = ServiceLoader.load(ZWaveConverter.class);
-        l.forEach(m -> addSupportedTypes(m, m.getSupportedTypeNames()));
+    @Autowired
+    private List<ZWaveConverter> converters;
+
+    @PostConstruct
+    public void mapConverters() {
+        converters.forEach(c -> stream(c.getClass().getMethods())
+                .filter(m -> !m.isBridge() && m.isAnnotationPresent(SupportsConversion.class))
+                .forEach(m -> addSupportedType(c, m)));
     }
 
-    private void addSupportedTypes(ZWaveConverter c, Set<String> supportedTypes) {
-        supportedTypes.forEach(s -> addSupportedType(c, s));
+    private void addSupportedType(ZWaveConverter c, Method m) {
+        SupportsConversion conversionInfo = m.getAnnotation(SupportsConversion.class);
+
+        if(conversionInfo.commandClass() != CommandClass.NONE) {
+            addSupportedType(c, conversionInfo.commandClass().getLabel());
+        } else if(conversionInfo.controllerMessage() != ControllerMessageType.NONE) {
+            addSupportedType(c, conversionInfo.controllerMessage().getLabel());
+        } else if(conversionInfo.convertsActions()) {
+            Class<?>[] parameterTypes = m.getParameterTypes();
+            if(parameterTypes.length == 1) {
+                addSupportedType(c, parameterTypes[0].getSimpleName());
+            }
+        }
     }
 
     private void addSupportedType(ZWaveConverter c, String typeName) {
@@ -31,7 +56,7 @@ public class ConverterFactoryImpl implements ConverterFactory {
     }
 
     @Override
-    public <S, T> Optional<ZWaveConverter<S, T>> createConverter(String requiredType) {
+    public Optional<ZWaveConverter> createConverter(String requiredType) {
         return Optional.ofNullable(converterMap.get(requiredType));
     }
 }

@@ -1,33 +1,26 @@
-package com.oberasoftware.home.zwave.converter.commandclass;
+package com.oberasoftware.home.zwave.converter.events;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.BinarySensorEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.messages.types.CommandClass;
 import org.slf4j.Logger;
-
-import java.util.Set;
+import org.springframework.stereotype.Component;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author renarj
  */
-public class BinarySensorConverter implements ZWaveConverter<ApplicationCommandEvent, BinarySensorEvent> {
+@Component
+public class BinarySensorConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(BinarySensorConverter.class);
 
-    private static final int SENSOR_BINARY_GET = 0x02;
     private static final int SENSOR_BINARY_REPORT = 0x03;
 
-
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(CommandClass.SENSOR_BINARY.getLabel());
-    }
-
-    @Override
+    @SupportsConversion(commandClass = CommandClass.SENSOR_BINARY)
     public BinarySensorEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Node: {} received a binary sensor request: {}", source.getNodeId(), source);
 

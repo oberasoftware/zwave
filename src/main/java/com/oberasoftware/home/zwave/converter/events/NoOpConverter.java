@@ -1,24 +1,20 @@
-package com.oberasoftware.home.zwave.converter.commandclass;
+package com.oberasoftware.home.zwave.converter.events;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.PingEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.messages.types.CommandClass;
-
-import java.util.Set;
+import org.springframework.stereotype.Component;
 
 /**
  * @author renarj
  */
-public class NoOpConverter implements ZWaveConverter<ApplicationCommandEvent, PingEvent> {
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(CommandClass.NO_OPERATION.getLabel());
-    }
+@Component
+public class NoOpConverter implements ZWaveConverter {
 
-    @Override
+    @SupportsConversion(commandClass = CommandClass.NO_OPERATION)
     public PingEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         return new PingEvent(source.getNodeId());
     }

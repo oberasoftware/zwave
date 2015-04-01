@@ -1,16 +1,14 @@
 package com.oberasoftware.home.zwave;
 
-import com.oberasoftware.home.zwave.api.events.EventBus;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.base.event.EventBus;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WaitForWakeUpAction;
 import com.oberasoftware.home.zwave.connector.ControllerConnector;
-import com.oberasoftware.home.zwave.converter.ConverterHandler;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.ZWaveNode;
-import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,9 +34,6 @@ public class TransactionManagerImpl implements TransactionManager {
     @Autowired
     private EventBus eventBus;
 
-    @Autowired
-    private ConverterHandler<ZWaveAction, ZWaveRawMessage> converterHandler;
-
     private AtomicInteger callbackGenerator = new AtomicInteger(1);
 
     @Override
@@ -47,35 +42,46 @@ public class TransactionManagerImpl implements TransactionManager {
             WaitForWakeUpAction wakeUpEventAction = (WaitForWakeUpAction) action;
             LOG.debug("Starting a parked wake up event action: {} with callback: {}", action, wakeUpEventAction.getCallbackId());
 
-            convertAndSendMessage(wakeUpEventAction.getDeviceAction(), wakeUpEventAction.getCallbackId());
+//            convertAndSendMessage(wakeUpEventAction.getDeviceAction(), wakeUpEventAction.getCallbackId());
+            eventBus.publish(wakeUpEventAction.getDeviceAction(), wakeUpEventAction.getCallbackId());
 
             return wakeUpEventAction.getCallbackId();
         } else {
             int callbackId = getCallbackId();
 
             if (isDeviceReady(action)) {
-                convertAndSendMessage(action, callbackId);
+                eventBus.publish(action, callbackId);
             } else {
                 LOG.debug("Starting action on battery device: {} that could be asleep", action);
-                eventBus.pushAsync(new WaitForWakeUpAction((ZWaveDeviceAction) action, callbackId));
+                eventBus.publish(new WaitForWakeUpAction((ZWaveDeviceAction) action, callbackId));
             }
 
             return callbackId;
         }
     }
-
-    private void convertAndSendMessage(ZWaveAction action, int callbackId) throws HomeAutomationException {
-        LOG.debug("Starting device action: {}", action);
-        ZWaveRawMessage rawMessage = converterHandler.convert(v -> v.getClass().getSimpleName(), action);
-        if (rawMessage != null) {
-            rawMessage.setCallbackId(callbackId);
-            rawMessage.setTransmitOptions(0x01 | 0x04 | 0x20);
-
-            connector.send(rawMessage);
-        } else {
-            LOG.error("Message could not be converted, cannot send action: {}", action);
-        }
-    }
+//
+//    private void convertAndSendMessage(ZWaveAction action, int callbackId) throws HomeAutomationException {
+//        LOG.debug("Starting device action: {}", action);
+//        ZWaveRawMessage rawMessage = conversionManager.convert(v -> v.getClass().getSimpleName(), action);
+//        if (rawMessage != null) {
+//            rawMessage.setCallbackId(callbackId);
+//            rawMessage.setTransmitOptions(0x01 | 0x04 | 0x20);
+//
+//            connector.send(rawMessage);
+//        } else {
+//            LOG.error("Message could not be converted, cannot send action: {}", action);
+//        }
+//    }
+//
+//    @EventSubscribe
+//    public void receiveSendEvent(SendDataCommand sendDataCommand) throws HomeAutomationException {
+//
+//        ZWaveRawMessage rawMessage = sendDataCommand.getRawMessage();
+//        rawMessage.setCallbackId(callbackId);
+//        rawMessage.setTransmitOptions(0x01 | 0x04 | 0x20);
+//
+//        connector.send(sendDataCommand.getRawMessage());
+//    }
 
     private boolean isDeviceReady(ZWaveAction action) {
         if(action instanceof ZWaveDeviceAction) {

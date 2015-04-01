@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.rules;
 
-import com.oberasoftware.home.zwave.api.ZWaveAction;
+import com.oberasoftware.home.zwave.api.Action;
 import com.oberasoftware.home.zwave.api.events.devices.DeviceEvent;
 
 import java.util.List;
@@ -13,9 +13,9 @@ public class Rule {
 
     private final List<Predicate<DeviceEvent>> predicates;
     private final List<ConditionSupplier> conditions;
-    private final List<ZWaveAction> actions;
+    private final List<Action> actions;
 
-    public Rule(List<Predicate<DeviceEvent>> predicates, List<ConditionSupplier> conditions, List<ZWaveAction> actions) {
+    public Rule(List<Predicate<DeviceEvent>> predicates, List<ConditionSupplier> conditions, List<Action> actions) {
         this.predicates = predicates;
         this.conditions = conditions;
         this.actions = actions;
@@ -25,7 +25,7 @@ public class Rule {
         return predicates.stream().allMatch(p -> p.test(deviceEvent)) && conditions.stream().allMatch(ConditionSupplier::evaluate);
     }
 
-    public List<ZWaveAction> getActions() {
+    public List<Action> getActions() {
         return actions;
     }
 

@@ -1,20 +1,21 @@
 package com.oberasoftware.home.zwave.converter.actions.devices;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.api.actions.devices.RequestNodeInfoAction;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
 import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
 import com.oberasoftware.home.zwave.messages.types.MessageType;
-import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
-
-import java.util.Set;
+import org.springframework.stereotype.Component;
 
 /**
  * @author renarj
  */
-public class RequestNodeInfoConverter implements ZWaveConverter<RequestNodeInfoAction, ZWaveRawMessage> {
-    @Override
+@Component
+public class RequestNodeInfoConverter implements ZWaveConverter {
+
+    @SupportsConversion
     public ZWaveRawMessage convert(RequestNodeInfoAction nodeInfoAction) throws HomeAutomationException {
         int nodeId = nodeInfoAction.getNodeId();
 
@@ -25,11 +26,4 @@ public class RequestNodeInfoConverter implements ZWaveConverter<RequestNodeInfoA
         message.setMessage(newPayload);
         return message;
     }
-
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(RequestNodeInfoAction.class.getSimpleName());
-    }
-
-
 }

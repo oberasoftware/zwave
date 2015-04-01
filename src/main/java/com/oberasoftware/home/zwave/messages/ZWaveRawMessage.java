@@ -54,7 +54,7 @@ public class ZWaveRawMessage implements ZWaveMessage {
 	/**
 	 * Indicates whether the serial message is valid.
 	 */
-	public boolean isValid = false;
+	private boolean isValid = false;
 
 	/**
 	 * Constructor. Creates a new instance of the SerialMessage class using the 
@@ -84,14 +84,19 @@ public class ZWaveRawMessage implements ZWaveMessage {
 	}
 
 	public ZWaveRawMessage(int nodeId, ControllerMessageType controllerMessageType, MessageType messageType, byte[] message) {
+		this(nodeId, controllerMessageType, messageType, message, 0);
+	}
+
+	public ZWaveRawMessage(int nodeId, ControllerMessageType controllerMessageType, MessageType messageType, byte[] message, int callbackId) {
 		LOG.debug("Node Message: {} Creating message type: {} {}, type = {}",
 				nodeId, controllerMessageType, toHexString(controllerMessageType.getKey()), messageType);
 		this.controllerMessageType = controllerMessageType;
 		this.messageType = messageType;
 		this.message = message;
 		this.messageNode = nodeId;
-
+		this.callbackId = callbackId;
 	}
+
 
 	/**
 	 * Constructor. Creates a new instance of the SerialMessage class from a
@@ -240,6 +245,10 @@ public class ZWaveRawMessage implements ZWaveMessage {
 	 */
 	public int getTransmitOptions() {
 		return transmitOptions;
+	}
+
+	public boolean isValid() {
+		return isValid;
 	}
 
 	/**

@@ -1,24 +1,25 @@
-package com.oberasoftware.home.zwave.converter.commandclass;
+package com.oberasoftware.home.zwave.converter.events;
 
-import com.google.common.collect.Sets;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.DeviceEvent;
 import com.oberasoftware.home.zwave.api.events.devices.DeviceSensorEvent;
+import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import com.oberasoftware.home.zwave.messages.types.CommandClass;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author renarj
  */
-public class MultiLevelSensorConverter implements ZWaveConverter<ApplicationCommandEvent, DeviceEvent> {
+@Component
+public class MultiLevelSensorConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(MultiLevelSensorConverter.class);
 
     private static final int SENSOR_MULTI_LEVEL_SUPPORTED_GET = 0x01;
@@ -31,13 +32,7 @@ public class MultiLevelSensorConverter implements ZWaveConverter<ApplicationComm
     private static final int PRECISION_MASK = 0xe0;
     private static final int PRECISION_SHIFT = 0x05;
 
-
-    @Override
-    public Set<String> getSupportedTypeNames() {
-        return Sets.newHashSet(CommandClass.SENSOR_MULTILEVEL.getLabel());
-    }
-
-    @Override
+    @SupportsConversion(commandClass = CommandClass.SENSOR_MULTILEVEL)
     public DeviceEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Handling multi level sensor request: {} from node: {}", source, source.getNodeId());
         byte[] payload = source.getPayload();
@@ -53,25 +48,8 @@ public class MultiLevelSensorConverter implements ZWaveConverter<ApplicationComm
             case SENSOR_MULTI_LEVEL_SUPPORTED_REPORT:
                 LOG.debug("Process Multi Level Supported Sensor Report");
 
-//                int payloadLength = serialMessage.getMessagePayload().length;
-//
-//                for(int i = offset + 1; i < payloadLength; ++i ) {
-//                    for(int bit = 0; bit < 8; ++bit) {
-//                        if( ((serialMessage.getMessagePayloadByte(i)) & (1 << bit) ) == 0 )
-//                            continue;
-//
-//                        int index = ((i - (offset + 1)) * 8 ) + bit + 1;
-//                        if(index >= SensorType.values().length)
-//                            continue;
-//
-//                        // (n)th bit is set. n is the index for the alarm type enumeration.
-//                        SensorType sensorTypeToAdd = SensorType.getSensorType(index);
-//                        this.sensors.add(sensorTypeToAdd);
-//                        logger.debug(String.format("NODE %d: Added sensor type %s (0x%02x)", this.getNode().getNodeId(), sensorTypeToAdd.getLabel(), index));
-//                    }
-//                }
-//
-//                this.getNode().advanceNodeStage(NodeStage.DYNAMIC);
+                //TODO: Support
+
                 break;
             case SENSOR_MULTI_LEVEL_REPORT:
                 LOG.debug("Sensor Multi Level report received for node: {}", nodeId);
