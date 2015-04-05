@@ -5,5 +5,5 @@ import com.oberasoftware.home.zwave.messages.ZWaveMessage;
 /**
  * @author renarj
  */
-public interface ZWaveAction extends ZWaveMessage, Action {
+public interface ZWaveAction extends ZWaveMessage {
 }

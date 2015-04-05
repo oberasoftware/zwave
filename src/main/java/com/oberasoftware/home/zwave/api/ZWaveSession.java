@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.api;
 
-import com.oberasoftware.home.zwave.api.events.EventListener;
+import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 
@@ -13,7 +13,7 @@ public interface ZWaveSession {
 
     boolean isNetworkReady();
 
-    void subscribe(EventListener eventListener);
+    void subscribe(EventHandler eventListener);
 
     NodeManager getDeviceManager();
 

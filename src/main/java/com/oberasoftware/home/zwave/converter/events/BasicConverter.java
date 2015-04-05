@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.events;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.BasicEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
@@ -23,6 +24,7 @@ public class BasicConverter implements ZWaveConverter {
     private static final int BASIC_GET = 0x02;
     private static final int BASIC_REPORT = 0x03;
 
+    @EventSubscribe
     @SupportsConversion(commandClass = CommandClass.BASIC)
     public BasicEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Basic command received for node: {}", source.getNodeId());

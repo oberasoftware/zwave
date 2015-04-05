@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.events;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.BatteryEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
@@ -22,6 +23,7 @@ public class BatteryConverter implements ZWaveConverter {
     private static final int BATTERY_GET = 0x02;
     private static final int BATTERY_REPORT = 0x03;
 
+    @EventSubscribe
     @SupportsConversion(commandClass = CommandClass.BATTERY)
     public BatteryEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Received battery information from node: {}", source.getNodeId());

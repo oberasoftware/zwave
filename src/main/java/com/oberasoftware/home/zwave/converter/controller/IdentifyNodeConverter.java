@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
@@ -24,6 +25,7 @@ public class IdentifyNodeConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(IdentifyNodeConverter.class);
 
     @SupportsConversion(controllerMessage = ControllerMessageType.IdentifyNode)
+    @EventSubscribe
     public NodeIdentifyEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
         LOG.debug("Handling incoming node information event: {}", source);
 

@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.events;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.VersionEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
@@ -24,6 +25,7 @@ public class VersionConverter implements ZWaveConverter {
     private static final int VERSION_COMMAND_CLASS_GET = 0x13;
     private static final int VERSION_COMMAND_CLASS_REPORT = 0x14;
 
+    @EventSubscribe
     @SupportsConversion(commandClass = CommandClass.VERSION)
     public VersionEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         int nodeId = source.getNodeId();

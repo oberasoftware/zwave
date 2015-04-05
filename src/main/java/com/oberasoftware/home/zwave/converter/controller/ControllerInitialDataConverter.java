@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerInitialDataEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
@@ -24,6 +25,7 @@ public class ControllerInitialDataConverter implements ZWaveConverter {
     private static final int NODE_BYTES_REQUIRED_LENGTH = 29; // 29 bytes = 232 bits, one for each supported node by Z-Wave;
 
     @SupportsConversion(controllerMessage = ControllerMessageType.SerialApiGetInitData)
+    @EventSubscribe
     public ControllerInitialDataEvent convert(ZWaveRawMessage message) throws HomeAutomationException {
         LOG.debug("Got MessageSerialApiGetInitData response: {}", message);
         int nodeByteLength = message.getMessageByte(2);

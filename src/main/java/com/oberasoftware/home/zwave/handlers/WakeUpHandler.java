@@ -1,7 +1,7 @@
 package com.oberasoftware.home.zwave.handlers;
 
-import com.oberasoftware.home.zwave.api.events.EventListener;
-import com.oberasoftware.home.zwave.api.events.Subscribe;
+import com.oberasoftware.base.event.EventHandler;
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.TransactionManager;
 import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WaitForWakeUpAction;
@@ -26,7 +26,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-public class WakeUpHandler implements EventListener<WakeUpReceivedEvent> {
+public class WakeUpHandler implements EventHandler {
     private static final Logger LOG = getLogger(WakeUpHandler.class);
 
     private final ConcurrentMap<Integer, Queue<WaitForWakeUpAction>> waitForWakeUpEvents = new ConcurrentHashMap<>();
@@ -40,7 +40,7 @@ public class WakeUpHandler implements EventListener<WakeUpReceivedEvent> {
     @Autowired
     private NodeEventHandler nodeEventHandler;
 
-    @Override
+    @EventSubscribe
     public void receive(WakeUpReceivedEvent event) throws Exception {
         LOG.debug("Received a wake-up event for node: {}", event.getNodeId());
 
@@ -49,7 +49,7 @@ public class WakeUpHandler implements EventListener<WakeUpReceivedEvent> {
         queueDeviceAction(event.getNodeId());
     }
 
-    @Subscribe
+    @EventSubscribe
     public void dateReceived(SendDataEvent sendDataEvent) throws Exception {
         LOG.debug("Received a node confirmation from node: {}", sendDataEvent.getNodeId());
 
@@ -81,13 +81,13 @@ public class WakeUpHandler implements EventListener<WakeUpReceivedEvent> {
         }
     }
 
-    @Subscribe
+    @EventSubscribe
     public void wakeUpNoMoreInformation(WakeUpNoMoreInformationEvent noMoreInformationEvent) {
         LOG.debug("Node: {} has gone back to sleep", noMoreInformationEvent.getNodeId());
         nodeManager.setNodeAvailability(noMoreInformationEvent.getNodeId(), SLEEPING);
     }
 
-    @Subscribe
+    @EventSubscribe
     public void waitForWakeUp(WaitForWakeUpAction waitForWakeUpEvent) {
         LOG.debug("Received an action: {} that needs to wait for device wake-up", waitForWakeUpEvent);
 

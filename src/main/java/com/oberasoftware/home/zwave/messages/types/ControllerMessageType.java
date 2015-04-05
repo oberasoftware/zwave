@@ -73,7 +73,7 @@ public enum ControllerMessageType {
     GetProtocolStatus(0xBF, "GetProtocolStatus"),
     SetPromiscuousMode(0xD0,"SetPromiscuousMode"),										// Set controller into promiscuous mode to listen to all frames
     PromiscuousApplicationCommandHandler(0xD1,"PromiscuousApplicationCommandHandler"),
-    NONE(-1, null);
+    ALL(-1, null);
 
     private int key;
     private String label;

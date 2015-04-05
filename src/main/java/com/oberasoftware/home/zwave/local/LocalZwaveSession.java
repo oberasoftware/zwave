@@ -1,11 +1,11 @@
 package com.oberasoftware.home.zwave.local;
 
+import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.home.zwave.ZWaveController;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveIntervalAction;
 import com.oberasoftware.home.zwave.api.ZWaveScheduler;
 import com.oberasoftware.home.zwave.api.ZWaveSession;
-import com.oberasoftware.home.zwave.api.events.EventListener;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 
@@ -26,7 +26,7 @@ public class LocalZwaveSession implements ZWaveSession {
     }
 
     @Override
-    public void subscribe(EventListener eventListener) {
+    public void subscribe(EventHandler eventListener) {
         getController().subscribe(eventListener);
     }
 

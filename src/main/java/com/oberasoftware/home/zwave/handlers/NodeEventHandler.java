@@ -1,12 +1,12 @@
 package com.oberasoftware.home.zwave.handlers;
 
+import com.oberasoftware.base.event.EventHandler;
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.ZWaveController;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.actions.devices.DeviceManufactorAction;
 import com.oberasoftware.home.zwave.api.actions.devices.IdentifyNodeAction;
 import com.oberasoftware.home.zwave.api.actions.devices.RequestNodeInfoAction;
-import com.oberasoftware.home.zwave.api.events.EventListener;
-import com.oberasoftware.home.zwave.api.events.Subscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerInitialDataEvent;
 import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
@@ -33,7 +33,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-public class NodeEventHandler implements EventListener<ControllerInitialDataEvent> {
+public class NodeEventHandler implements EventHandler {
     private static final Logger LOG = getLogger(NodeEventHandler.class);
 
     @Autowired
@@ -46,7 +46,7 @@ public class NodeEventHandler implements EventListener<ControllerInitialDataEven
 
     private Map<Integer, Integer> outstandingNodeActions = new ConcurrentHashMap<>();
 
-    @Override
+    @EventSubscribe
     public void receive(ControllerInitialDataEvent event) throws Exception {
         LOG.debug("Received a initial controller data with node information: {}", event);
 
@@ -60,7 +60,7 @@ public class NodeEventHandler implements EventListener<ControllerInitialDataEven
         });
     }
 
-    @Subscribe
+    @EventSubscribe
     public void receiveNodeInformation(NodeIdentifyEvent nodeIdentifyEvent) {
         LOG.debug("Received node information: {}", nodeIdentifyEvent);
 
@@ -83,7 +83,7 @@ public class NodeEventHandler implements EventListener<ControllerInitialDataEven
         }
     }
 
-    @Subscribe
+    @EventSubscribe
     public void receivedManufactorInformation(ManufactorInfoEvent manufactorInfoEvent) {
         LOG.debug("Received device manufacturer info: {} for node: {}", manufactorInfoEvent, manufactorInfoEvent.getNodeId());
 
@@ -91,7 +91,7 @@ public class NodeEventHandler implements EventListener<ControllerInitialDataEven
         nodeManager.setNodeStatus(manufactorInfoEvent.getNodeId(), NodeStatus.INITIALIZED);
     }
 
-    @Subscribe
+    @EventSubscribe
     public void receivePing(SendDataEvent sendDataEvent) {
         if(outstandingNodeActions.containsKey(sendDataEvent.getCallbackId())) {
             int nodeId = outstandingNodeActions.remove(sendDataEvent.getCallbackId());

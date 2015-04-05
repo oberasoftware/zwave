@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.core.impl;
 
-import com.oberasoftware.home.zwave.api.events.EventBus;
+import com.oberasoftware.base.event.EventBus;
 import com.oberasoftware.home.zwave.api.events.devices.NodeRegisteredEvent;
 import com.oberasoftware.home.zwave.core.NodeAvailability;
 import com.oberasoftware.home.zwave.core.NodeStatus;
@@ -50,7 +50,7 @@ public class NodeManagerTest {
         nodeManager.registerNode(new ZWaveNodeImpl(1, NodeStatus.IDENTIFIED, NodeAvailability.AVAILABLE, Optional.empty(), Optional.empty()));
 
         ArgumentCaptor<NodeRegisteredEvent> newDeviceEventCaptor = ArgumentCaptor.forClass(NodeRegisteredEvent.class);
-        verify(bus, times(1)).pushAsync(newDeviceEventCaptor.capture());
+        verify(bus, times(1)).publish(newDeviceEventCaptor.capture());
 
         NodeRegisteredEvent event = newDeviceEventCaptor.getValue();
         assertThat(event.getNodeId(), is(1));

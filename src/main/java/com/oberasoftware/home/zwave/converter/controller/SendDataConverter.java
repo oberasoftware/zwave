@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.SEND_STATE;
 import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
 import com.oberasoftware.home.zwave.api.events.controller.SendDataStateEvent;
@@ -24,6 +25,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class SendDataConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(SendDataConverter.class);
 
+    @EventSubscribe
     @SupportsConversion(controllerMessage = ControllerMessageType.SendData)
     public SendDataStateEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
         switch(source.getMessageType()) {

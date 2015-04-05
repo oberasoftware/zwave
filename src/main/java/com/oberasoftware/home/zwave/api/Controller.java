@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.api;
 
-import com.oberasoftware.home.zwave.api.events.EventListener;
+import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 
 /**
@@ -11,7 +11,7 @@ public interface Controller {
 
     int getControllerId();
 
-    <T> void subscribe(EventListener<T> topicListener);
+    <T> void subscribe(EventHandler topicListener);
 
     int send(ZWaveAction message) throws HomeAutomationException;
 

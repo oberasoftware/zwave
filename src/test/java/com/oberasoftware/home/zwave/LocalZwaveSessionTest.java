@@ -1,9 +1,9 @@
 package com.oberasoftware.home.zwave;
 
+import com.oberasoftware.base.event.EventHandler;
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.ZWaveSession;
-import com.oberasoftware.home.zwave.api.actions.devices.RequestNodeInfoAction;
-import com.oberasoftware.home.zwave.api.events.EventListener;
-import com.oberasoftware.home.zwave.api.events.Subscribe;
+import com.oberasoftware.home.zwave.api.actions.SwitchAction;
 import com.oberasoftware.home.zwave.api.events.ZWaveEvent;
 import com.oberasoftware.home.zwave.api.events.devices.DeviceSensorEvent;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
@@ -37,30 +37,30 @@ public class LocalZwaveSessionTest {
             s.subscribe(new MyEventListener());
 
 
-        s.doAction(new RequestNodeInfoAction(14));
+//        s.doAction(new RequestNodeInfoAction(14));
 
-            while(!s.isNetworkReady()) {
-                LOG.info("Network not ready yet, sleeping");
-                sleepUninterruptibly(1, TimeUnit.SECONDS);
-            }
+//            while(!s.isNetworkReady()) {
+//                LOG.info("Network not ready yet, sleeping");
+//                sleepUninterruptibly(1, TimeUnit.SECONDS);
+//            }
 
             LOG.info("Wait over, sending message");
 
-            int nodeId = 7;
+            int nodeId = 13;
             int dimmerLevel = 50;
-//            s.doAction(new SwitchAction(() -> nodeId, SwitchAction.STATE.ON));
+            s.doAction(new SwitchAction(() -> nodeId, SwitchAction.STATE.ON));
 //            s.doAction(new SwitchAction(() -> nodeId, dimmerLevel));
 
             LOG.info("Waiting a bit to switch off so we can see some visual effect");
             sleepUninterruptibly(10, TimeUnit.SECONDS);
 
             LOG.info("Wait over, sending Off message");
-//            s.doAction(new SwitchAction(() -> nodeId, SwitchAction.STATE.OFF));
+            s.doAction(new SwitchAction(() -> nodeId, SwitchAction.STATE.OFF));
 
             LOG.info("Light off, preparing for shutdown in a bit");
             sleepUninterruptibly(3, TimeUnit.SECONDS);
 
-            s.getDeviceManager().getNodes().forEach(n -> LOG.info("Node found: {}", n.getNodeId()));
+//            s.getDeviceManager().getNodes().forEach(n -> LOG.info("Node found: {}", n.getNodeId()));
 
 //            s.schedule(new BatteryGetAction(6), TimeUnit.HOURS, 6);
 
@@ -70,14 +70,14 @@ public class LocalZwaveSessionTest {
         }
     }
 
-    public static class MyEventListener implements EventListener<ZWaveEvent> {
+    public static class MyEventListener implements EventHandler {
 
-        @Override
+        @EventSubscribe
         public void receive(ZWaveEvent event) throws Exception {
             LOG.debug("Received an event: {}", event);
         }
 
-        @Subscribe
+        @EventSubscribe
         public void handleSensorEvent(DeviceSensorEvent sensorEvent) {
             LOG.debug("Received a sensor: {} value: {} for node: {}", sensorEvent.getSensorType(), sensorEvent.getValue().doubleValue(), sensorEvent.getNodeId());
         }

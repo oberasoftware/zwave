@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerInformationEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
@@ -25,6 +26,7 @@ public class ControllerInformationConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(ControllerInformationConverter.class);
 
     @SupportsConversion(controllerMessage = ControllerMessageType.GetCapabilities)
+    @EventSubscribe
     public ControllerInformationEvent convert(ZWaveRawMessage message) throws HomeAutomationException {
         byte[] payload = message.getMessage();
         LOG.debug("Handle Controller Information reuqest, message length {}", payload.length);

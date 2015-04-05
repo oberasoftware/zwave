@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.events;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.DeviceEvent;
 import com.oberasoftware.home.zwave.api.events.devices.DeviceSensorEvent;
@@ -32,6 +33,7 @@ public class MultiLevelSensorConverter implements ZWaveConverter {
     private static final int PRECISION_MASK = 0xe0;
     private static final int PRECISION_SHIFT = 0x05;
 
+    @EventSubscribe
     @SupportsConversion(commandClass = CommandClass.SENSOR_MULTILEVEL)
     public DeviceEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Handling multi level sensor request: {} from node: {}", source, source.getNodeId());

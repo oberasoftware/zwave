@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.events;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpIntervalReportEvent;
@@ -30,6 +31,7 @@ public class WakeUpConverter implements ZWaveConverter {
     private static final int WAKE_UP_INTERVAL_CAPABILITIES_GET = 0x09;
     private static final int WAKE_UP_INTERVAL_CAPABILITIES_REPORT = 0x0A;
 
+    @EventSubscribe
     @SupportsConversion(commandClass = CommandClass.WAKE_UP)
     public WakeUpEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         final byte[] payload = source.getPayload();

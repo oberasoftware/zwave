@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.events;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
@@ -22,6 +23,7 @@ public class DeviceManufactorConverter implements ZWaveConverter {
     private static final int MANUFACTURER_SPECIFIC_GET = 0x04;
     private static final int MANUFACTURER_SPECIFIC_REPORT = 0x05;
 
+    @EventSubscribe
     @SupportsConversion(commandClass = CommandClass.MANUFACTURER_SPECIFIC)
     public ManufactorInfoEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Received manufacturer info for node: {}", source.getNodeId());

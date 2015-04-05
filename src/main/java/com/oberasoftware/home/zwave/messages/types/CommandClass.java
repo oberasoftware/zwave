@@ -88,7 +88,7 @@ public enum CommandClass {
     SENSOR_CONFIGURATION(0x9E, "SENSOR_CONFIGURATION"),
     MARK(0xEF, "MARK"),
     NON_INTEROPERABLE(0xF0, "NON_INTEROPERABLE"),
-    NONE(-1, null);
+    ALL(-1, null);
 
     private int classCode;
     private String label;

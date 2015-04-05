@@ -57,7 +57,7 @@ public class ReceiverThread extends Thread {
             return;
         }
 
-        eventBus.publish(new MessageReceivedEvent(serialMessage));
+        eventBus.publish(serialMessage);
     }
 
     /**

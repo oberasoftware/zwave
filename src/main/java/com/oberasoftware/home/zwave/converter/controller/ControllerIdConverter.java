@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerIdEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class ControllerIdConverter implements ZWaveConverter {
 
     @SupportsConversion(controllerMessage = ControllerMessageType.MemoryGetId)
+    @EventSubscribe
     public ControllerIdEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
         byte[] payload = source.getMessage();
 

@@ -1,10 +1,10 @@
 package com.oberasoftware.home.zwave;
 
+import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveIntervalAction;
 import com.oberasoftware.home.zwave.api.ZWaveScheduler;
 import com.oberasoftware.home.zwave.api.ZWaveSession;
-import com.oberasoftware.home.zwave.api.events.EventListener;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class ZwaveSessionImpl implements ZWaveSession {
     }
 
     @Override
-    public void subscribe(EventListener eventListener) {
+    public void subscribe(EventHandler eventListener) {
         zWaveController.subscribe(eventListener);
     }
 

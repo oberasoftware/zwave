@@ -1,6 +1,7 @@
 package com.oberasoftware.home.zwave.converter.controller;
 
 import com.google.common.collect.Lists;
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.events.devices.NodeInfoReceivedEvent;
 import com.oberasoftware.home.zwave.converter.SupportsConversion;
 import com.oberasoftware.home.zwave.converter.ZWaveConverter;
@@ -27,6 +28,7 @@ public class ApplicationUpdateCommandConverter implements ZWaveConverter {
     private static final int NODE_INFO_RECEIVED = 0x84;
 
     @SupportsConversion(controllerMessage = ControllerMessageType.ApplicationUpdate)
+    @EventSubscribe
     public NodeInfoReceivedEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
 
         byte[] message = source.getMessage();

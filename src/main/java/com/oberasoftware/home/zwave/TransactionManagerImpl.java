@@ -1,6 +1,8 @@
 package com.oberasoftware.home.zwave;
 
 import com.oberasoftware.base.event.EventBus;
+import com.oberasoftware.base.event.EventHandler;
+import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerEvent;
@@ -9,6 +11,8 @@ import com.oberasoftware.home.zwave.connector.ControllerConnector;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.ZWaveNode;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.threading.ActionConvertedEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +26,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author renarj
  */
 @Component
-public class TransactionManagerImpl implements TransactionManager {
+public class TransactionManagerImpl implements TransactionManager, EventHandler {
     private static final Logger LOG = getLogger(TransactionManagerImpl.class);
 
     @Autowired
@@ -49,12 +53,12 @@ public class TransactionManagerImpl implements TransactionManager {
         } else {
             int callbackId = getCallbackId();
 
-            if (isDeviceReady(action)) {
+//            if (isDeviceReady(action)) {
                 eventBus.publish(action, callbackId);
-            } else {
-                LOG.debug("Starting action on battery device: {} that could be asleep", action);
-                eventBus.publish(new WaitForWakeUpAction((ZWaveDeviceAction) action, callbackId));
-            }
+//            } else {
+//                LOG.debug("Starting action on battery device: {} that could be asleep", action);
+//                eventBus.publish(new WaitForWakeUpAction((ZWaveDeviceAction) action, callbackId));
+//            }
 
             return callbackId;
         }
@@ -73,15 +77,14 @@ public class TransactionManagerImpl implements TransactionManager {
 //        }
 //    }
 //
-//    @EventSubscribe
-//    public void receiveSendEvent(SendDataCommand sendDataCommand) throws HomeAutomationException {
-//
-//        ZWaveRawMessage rawMessage = sendDataCommand.getRawMessage();
-//        rawMessage.setCallbackId(callbackId);
-//        rawMessage.setTransmitOptions(0x01 | 0x04 | 0x20);
-//
-//        connector.send(sendDataCommand.getRawMessage());
-//    }
+    @EventSubscribe
+    public void receiveSendEvent(ActionConvertedEvent convertedAction) throws HomeAutomationException {
+        LOG.debug("Converted action: {} sending to controller", convertedAction);
+        ZWaveRawMessage rawMessage = convertedAction.getRawMessage();
+        rawMessage.setTransmitOptions(0x01 | 0x04 | 0x20);
+
+        connector.send(rawMessage);
+    }
 
     private boolean isDeviceReady(ZWaveAction action) {
         if(action instanceof ZWaveDeviceAction) {

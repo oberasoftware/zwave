@@ -1,17 +1,18 @@
 package com.oberasoftware.home.zwave;
 
+import com.oberasoftware.base.event.EventBus;
+import com.oberasoftware.base.event.EventHandler;
+import com.oberasoftware.base.event.EventSubscribe;
+import com.oberasoftware.home.zwave.api.Controller;
+import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.actions.controller.ControllerCapabilitiesAction;
 import com.oberasoftware.home.zwave.api.actions.controller.ControllerInitialDataAction;
 import com.oberasoftware.home.zwave.api.actions.controller.GetControllerIdAction;
-import com.oberasoftware.home.zwave.api.events.EventListener;
-import com.oberasoftware.home.zwave.api.events.EventBus;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
-import com.oberasoftware.home.zwave.api.Controller;
-import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerIdEvent;
 import com.oberasoftware.home.zwave.connector.ControllerConnector;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.NodeStatus;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import javax.annotation.PreDestroy;
  * @author renarj
  */
 @Component
-public class ZWaveController implements Controller, EventListener<ControllerIdEvent> {
+public class ZWaveController implements Controller, EventHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ZWaveController.class);
 
     @Autowired
@@ -65,8 +66,8 @@ public class ZWaveController implements Controller, EventListener<ControllerIdEv
     }
 
     @Override
-    public <T> void subscribe(EventListener<T> eventListener) {
-        eventBus.addListener(eventListener);
+    public <T> void subscribe(EventHandler eventListener) {
+        eventBus.registerHandler(eventListener);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class ZWaveController implements Controller, EventListener<ControllerIdEv
         return controllerIdEvent != null ? controllerIdEvent.getControllerId() : -1;
     }
 
-    @Override
+    @EventSubscribe
     public void receive(ControllerIdEvent event) throws Exception {
         LOG.info("Received controller information: {}", event);
 
