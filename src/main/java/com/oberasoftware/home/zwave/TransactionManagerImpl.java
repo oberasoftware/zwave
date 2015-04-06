@@ -6,13 +6,13 @@ import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerEvent;
-import com.oberasoftware.home.zwave.api.events.devices.WaitForWakeUpAction;
-import com.oberasoftware.home.zwave.connector.ControllerConnector;
+import com.oberasoftware.home.zwave.api.actions.devices.WaitForWakeUpAction;
+import com.oberasoftware.home.zwave.api.ControllerConnector;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.ZWaveNode;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
-import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
-import com.oberasoftware.home.zwave.threading.ActionConvertedEvent;
+import com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.api.events.ActionConvertedEvent;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -106,9 +106,12 @@ public class TransactionManagerImpl implements TransactionManager, EventHandler 
         return true;
     }
 
-    @Override
+    @EventSubscribe
     public void completeTransaction(ControllerEvent controllerEvent) throws HomeAutomationException {
-        connector.completeTransaction();
+        if(controllerEvent.isTransactionCompleted()) {
+            LOG.debug("Received an event: {} that completes a transaction", controllerEvent);
+            connector.completeTransaction();
+        }
     }
 
     @Override

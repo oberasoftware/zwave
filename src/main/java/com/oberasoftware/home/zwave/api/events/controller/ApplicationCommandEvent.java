@@ -1,8 +1,8 @@
 package com.oberasoftware.home.zwave.api.events.controller;
 
-import com.oberasoftware.home.zwave.messages.types.CommandClass;
+import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 
-import static com.oberasoftware.home.zwave.messages.ZWaveRawMessage.bb2hex;
+import static com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage.bb2hex;
 
 /**
  * @author renarj

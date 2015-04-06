@@ -6,6 +6,6 @@ package com.oberasoftware.home.zwave.api.events.controller;
 public class NodeInfoRequestEvent implements ControllerEvent {
     @Override
     public boolean isTransactionCompleted() {
-        return true;
+        return false;
     }
 }

@@ -1,9 +1,9 @@
 package com.oberasoftware.home.zwave.threading;
 
 import com.oberasoftware.base.event.EventBus;
-import com.oberasoftware.home.zwave.connector.SerialZWaveConnector;
-import com.oberasoftware.home.zwave.messages.ByteMessage;
-import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.SerialZWaveConnector;
+import com.oberasoftware.home.zwave.api.messages.ByteMessage;
+import com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.*;
-import static com.oberasoftware.home.zwave.messages.ZWaveRawMessage.bb2hex;
+import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.ACK;
+import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.SOF;
+import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.NAK;
+import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.CAN;
+import static com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage.bb2hex;
 
 /**
  * @author Renze de Vries
@@ -78,9 +81,9 @@ public class ReceiverThread extends Thread {
             try {
                 nextByte = inputStream.read();
 
-                if (nextByte == -1)
+                if (nextByte == -1) {
                     continue;
-
+                }
             } catch (IOException e) {
                 LOG.error("Got I/O exception {} during receiving. exiting thread.", e.getLocalizedMessage());
                 break;
@@ -100,7 +103,7 @@ public class ReceiverThread extends Thread {
 
                     byte[] buffer = new byte[messageLength + 2];
                     buffer[0] = SOF;
-                    buffer[1] = (byte)messageLength;
+                    buffer[1] = (byte) messageLength;
                     int total = 0;
 
                     while (total < messageLength) {

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class LocalZwaveSession implements ZWaveSession {
 
     public LocalZwaveSession() {
-//        LocalSpringContainer.getBean(ZWaveController.class).initializeNetwork();
+        LocalSpringContainer.getBean(ZWaveController.class).initializeNetwork();
     }
 
     @Override

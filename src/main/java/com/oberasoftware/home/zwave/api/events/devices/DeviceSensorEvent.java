@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.api.events.devices;
 
-import com.oberasoftware.home.zwave.converter.events.SensorType;
+import com.oberasoftware.home.zwave.eventhandlers.events.SensorType;
 
 import java.math.BigDecimal;
 

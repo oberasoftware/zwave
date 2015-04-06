@@ -1,7 +1,7 @@
 package com.oberasoftware.home.zwave.threading;
 
-import com.oberasoftware.home.zwave.connector.SerialZWaveConnector;
-import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.SerialZWaveConnector;
+import com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
 import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.ZWAVE_RESPONSE_TIMEOUT;
-import static com.oberasoftware.home.zwave.messages.ZWaveRawMessage.bb2hex;
+import static com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage.bb2hex;
 
 /**
  * @author Renze de Vries
@@ -56,7 +56,7 @@ public class SenderThread extends Thread {
 
                     if (barrier.tryAcquire(1, zWaveResponseTimeout, TimeUnit.MILLISECONDS)) {
                         long responseTime = System.currentTimeMillis() - messageTimeStart;
-                        LOG.error("Response processed after {} ms.", responseTime);
+                        LOG.info("Response processed after {} ms.", responseTime);
                     } else {
                         if(sendMessage.getRetries() == 0) {
                             sendMessage.incrementRetry();
@@ -94,7 +94,7 @@ public class SenderThread extends Thread {
     }
 
     public void completeTransaction() {
-        LOG.error("Completing send transaction");
+        LOG.debug("Completing send transaction");
         barrier.release();
     }
 

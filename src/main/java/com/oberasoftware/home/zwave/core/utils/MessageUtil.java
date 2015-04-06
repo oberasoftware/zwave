@@ -1,7 +1,7 @@
 package com.oberasoftware.home.zwave.core.utils;
 
-import com.oberasoftware.home.zwave.messages.types.CommandClass;
-import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
+import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
+import com.oberasoftware.home.zwave.api.messages.types.ControllerMessageType;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author renarj
  */
-public class MessageUtil {
+public final class MessageUtil {
     private static final Logger LOG = getLogger(MessageUtil.class);
 
     private static final MessageUtil INSTANCE = new MessageUtil();

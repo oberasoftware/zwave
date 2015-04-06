@@ -2,9 +2,9 @@ package com.oberasoftware.home.zwave.filters;
 
 import com.oberasoftware.base.event.EventFilter;
 import com.oberasoftware.base.event.HandlerEntry;
-import com.oberasoftware.home.zwave.converter.SupportsConversion;
-import com.oberasoftware.home.zwave.messages.ZWaveRawMessage;
-import com.oberasoftware.home.zwave.messages.types.ControllerMessageType;
+import com.oberasoftware.home.zwave.api.events.SupportsConversion;
+import com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage;
+import com.oberasoftware.home.zwave.api.messages.types.ControllerMessageType;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -28,12 +28,12 @@ public class ControllerMessageTypeFilter implements EventFilter {
             }
         }
 
-        LOG.debug("Event: {} is not filtered for method: {} on class: {}", event, method, method.getDeclaringClass());
+        LOG.debug("Event: {} is not filtered for method: {} on class: {}", event, method.getName(), method.getDeclaringClass());
         return false;
     }
 
     private boolean checkFilter(ZWaveRawMessage message, Method method) {
-        LOG.debug("Checking message filter for: {} on method: {} in class: {}", message, method, method.getDeclaringClass());
+        LOG.debug("Checking message filter for: {} on method: {} in class: {}", message, method.getName(), method.getDeclaringClass());
         SupportsConversion supportsConversion = method.getAnnotation(SupportsConversion.class);
 
         //if the handler does not support this controller message it is filtered

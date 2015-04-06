@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.api.events.controller;
 
-import com.oberasoftware.home.zwave.messages.types.CommandClass;
+import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 
 import java.util.Set;
 

@@ -5,7 +5,7 @@ import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
 import com.oberasoftware.home.zwave.core.NodeAvailability;
 import com.oberasoftware.home.zwave.core.NodeStatus;
 import com.oberasoftware.home.zwave.core.ZWaveNode;
-import com.oberasoftware.home.zwave.messages.types.CommandClass;
+import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 
 import java.util.List;
 import java.util.Optional;
