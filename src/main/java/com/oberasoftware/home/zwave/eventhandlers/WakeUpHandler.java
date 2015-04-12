@@ -3,14 +3,13 @@ package com.oberasoftware.home.zwave.eventhandlers;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.TransactionManager;
-import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
 import com.oberasoftware.home.zwave.api.actions.devices.WaitForWakeUpAction;
+import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpNoMoreInformationEvent;
 import com.oberasoftware.home.zwave.api.events.devices.WakeUpReceivedEvent;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +24,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author renarj
  */
-@Component
+//@Component
 public class WakeUpHandler implements EventHandler {
     private static final Logger LOG = getLogger(WakeUpHandler.class);
 

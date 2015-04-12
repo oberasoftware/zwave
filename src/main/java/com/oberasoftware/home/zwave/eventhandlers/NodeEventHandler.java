@@ -6,10 +6,12 @@ import com.oberasoftware.home.zwave.ZWaveController;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.actions.devices.DeviceManufactorAction;
 import com.oberasoftware.home.zwave.api.actions.devices.IdentifyNodeAction;
+import com.oberasoftware.home.zwave.api.actions.devices.RequestNodeInfoAction;
 import com.oberasoftware.home.zwave.api.events.controller.ControllerInitialDataEvent;
 import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
+import com.oberasoftware.home.zwave.api.events.devices.NodeInfoReceivedEvent;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.NodeStatus;
 import com.oberasoftware.home.zwave.core.utils.EventSupplier;
@@ -71,9 +73,9 @@ public class NodeEventHandler implements EventHandler {
             LOG.debug("Received identity information for node: {}", nodeId);
 
             if(nodeId != zWaveController.getControllerId()) {
-//                int callbackId = send(() -> new RequestNodeInfoAction(nodeId));
-//
-//                outstandingNodeActions.put(callbackId, nodeId);
+                int callbackId = send(() -> new RequestNodeInfoAction(nodeId));
+
+                outstandingNodeActions.put(callbackId, nodeId);
             } else {
                 LOG.debug("Received information for Controller: {}, advancing stage to: {}", nodeId, INITIALIZED);
                 nodeManager.setNodeStatus(nodeId, INITIALIZED);
@@ -90,7 +92,7 @@ public class NodeEventHandler implements EventHandler {
         nodeManager.setNodeStatus(manufactorInfoEvent.getNodeId(), NodeStatus.INITIALIZED);
     }
 
-//    @EventSubscribe
+    @EventSubscribe
     public void receivePing(SendDataEvent sendDataEvent) {
         if(outstandingNodeActions.containsKey(sendDataEvent.getCallbackId())) {
             int nodeId = outstandingNodeActions.remove(sendDataEvent.getCallbackId());
@@ -108,6 +110,12 @@ public class NodeEventHandler implements EventHandler {
 
             send(() -> new DeviceManufactorAction(nodeId));
         }
+    }
+
+    @EventSubscribe
+    public void receiveNodeInformation(NodeInfoReceivedEvent event) {
+        LOG.debug("Received node: {} command classes information: {}", event.getNodeId(), event.getCommandClasses());
+        nodeManager.registerCommandClasses(event.getNodeId(), event.getCommandClasses());
     }
 
     public int getNodeId(int callbackId) {

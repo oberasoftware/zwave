@@ -7,6 +7,7 @@ import com.oberasoftware.home.zwave.core.NodeStatus;
 import com.oberasoftware.home.zwave.core.ZWaveNode;
 import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class ZWaveNodeImpl implements ZWaveNode {
 
     private final Optional<NodeIdentifyEvent> optionalNodeInformation;
     private final Optional<ManufactorInfoEvent> optionalManufacturerInformation;
+    private final List<CommandClass> commandClasses = new ArrayList<>();
 
     public ZWaveNodeImpl(int nodeId, NodeStatus nodeStatus, NodeAvailability availability, Optional<NodeIdentifyEvent> optionalNodeInformation, Optional<ManufactorInfoEvent> optionalManufacturerInformation) {
         this.nodeId = nodeId;
@@ -28,6 +30,10 @@ public class ZWaveNodeImpl implements ZWaveNode {
         this.availability = availability;
         this.optionalNodeInformation = optionalNodeInformation;
         this.optionalManufacturerInformation = optionalManufacturerInformation;
+    }
+
+    public void addCommandClass(CommandClass commandClass) {
+        commandClasses.add(commandClass);
     }
 
     @Override
@@ -57,7 +63,7 @@ public class ZWaveNodeImpl implements ZWaveNode {
 
     @Override
     public List<CommandClass> getCommandClasses() {
-        return null;
+        return commandClasses;
     }
 
     @Override

@@ -45,9 +45,9 @@ public class ApplicationUpdateCommandConverter implements ZWaveConverter {
                 for (int i = 6; i < length + 3; i++) {
                     int data = message[i]  & 0xff;
                     if(data != 0xef) {
-                        LOG.debug("Received command class: {} for node: {}", data, nodeId);
-
                         CommandClass commandClass = MessageUtil.getCommandClass(data);
+                        LOG.debug("Received command class: {} for node: {}", commandClass != null ? commandClass : data, nodeId);
+
                         if (commandClass != null) {
                             commandClassList.add(commandClass);
                         }

@@ -24,12 +24,11 @@ public class SwitchActionConverter implements ZWaveConverter {
 
     @EventSubscribe
     public ActionConvertedEvent convert(SwitchAction switchAction, int callbackId) throws HomeAutomationException {
-        int nodeId = switchAction.getDevice().getNodeId();
         int level = switchAction.getLevel();
 
         if(level >0 && level < SwitchAction.MAX_LEVEL) {
             //we will set a dimmer level
-            return ActionConverterBuilder.create(SendData, Request, nodeId)
+            return ActionConverterBuilder.create(SendData, Request, switchAction)
                     .addCommandClass(CommandClass.SWITCH_MULTILEVEL)
                     .addInt(SWITCH_MULTILEVEL_SET)
                     .addInt(level)
@@ -38,7 +37,7 @@ public class SwitchActionConverter implements ZWaveConverter {
         } else {
             int command = switchAction.getDesiredState() == SwitchAction.STATE.ON ? 0xFF : 0x00;
 
-            return ActionConverterBuilder.create(SendData, Request, nodeId)
+            return ActionConverterBuilder.create(SendData, Request, switchAction)
                     .addInt(SWITCH_BINARY)
                     .addInt(ZWAVE_CONSTANTS.SWITCH_BINARY_SET)
                     .addInt(command)

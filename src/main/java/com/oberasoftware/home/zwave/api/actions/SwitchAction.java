@@ -1,6 +1,5 @@
 package com.oberasoftware.home.zwave.api.actions;
 
-import com.oberasoftware.home.zwave.api.ZWaveDevice;
 import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 
 /**
@@ -16,35 +15,46 @@ public class SwitchAction implements ZWaveDeviceAction {
     }
 
     private final STATE desiredState;
-    private final ZWaveDevice device;
+    private final int nodeId;
+    private final int endpointId;
 
     private final int level;
 
-    public SwitchAction(ZWaveDevice device, STATE desiredState) {
-        this(device, desiredState, MAX_LEVEL);
+    public SwitchAction(int nodeId, STATE desiredState) {
+        this(nodeId, DEFAULT_ENDPOINTID, desiredState, MAX_LEVEL);
     }
 
-    public SwitchAction(ZWaveDevice device, int level) {
-        this(device, STATE.ON, level);
+    public SwitchAction(int nodeId, int level) {
+        this(nodeId, DEFAULT_ENDPOINTID, STATE.ON, level);
     }
 
-    private SwitchAction(ZWaveDevice device, STATE desiredState, int level) {
-        this.device = device;
+    public SwitchAction(int nodeId, int endpointId, int level) {
+        this(nodeId, endpointId, STATE.ON, level);
+    }
+
+    public SwitchAction(int nodeId, int endpointId, STATE desiredState) {
+        this(nodeId, endpointId, desiredState, MAX_LEVEL);
+    }
+
+    private SwitchAction(int nodeId, int endpointId, STATE desiredState, int level) {
+        this.nodeId = nodeId;
+        this.endpointId = endpointId;
         this.desiredState = desiredState;
         this.level = level;
     }
 
     @Override
     public int getNodeId() {
-        return device.getNodeId();
+        return nodeId;
+    }
+
+    @Override
+    public int getEndpointId() {
+        return endpointId;
     }
 
     public STATE getDesiredState() {
         return desiredState;
-    }
-
-    public ZWaveDevice getDevice() {
-        return device;
     }
 
     public int getLevel() {
@@ -55,7 +65,7 @@ public class SwitchAction implements ZWaveDeviceAction {
     public String toString() {
         return "SwitchAction{" +
                 "desiredState=" + desiredState +
-                ", device=" + device +
+                ", nodeId=" + nodeId +
                 '}';
     }
 }

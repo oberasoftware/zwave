@@ -3,6 +3,7 @@ package com.oberasoftware.home.zwave.core;
 
 import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
+import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 
 import java.util.List;
 
@@ -13,6 +14,10 @@ public interface NodeManager {
     void registerNode(int nodeId);
 
     void registerNode(ZWaveNode node);
+
+    void registerCommandClass(int nodeId, CommandClass commandClass);
+
+    void registerCommandClasses(int nodeId, List<CommandClass> commandClasses);
 
     /**
      * This indicates if all nodes in the network have reached the minimal status specified

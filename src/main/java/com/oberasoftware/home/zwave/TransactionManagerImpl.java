@@ -46,37 +46,23 @@ public class TransactionManagerImpl implements TransactionManager, EventHandler 
             WaitForWakeUpAction wakeUpEventAction = (WaitForWakeUpAction) action;
             LOG.debug("Starting a parked wake up event action: {} with callback: {}", action, wakeUpEventAction.getCallbackId());
 
-//            convertAndSendMessage(wakeUpEventAction.getDeviceAction(), wakeUpEventAction.getCallbackId());
             eventBus.publish(wakeUpEventAction.getDeviceAction(), wakeUpEventAction.getCallbackId());
 
             return wakeUpEventAction.getCallbackId();
         } else {
             int callbackId = getCallbackId();
 
-//            if (isDeviceReady(action)) {
+            if (isDeviceReady(action)) {
                 eventBus.publish(action, callbackId);
-//            } else {
-//                LOG.debug("Starting action on battery device: {} that could be asleep", action);
-//                eventBus.publish(new WaitForWakeUpAction((ZWaveDeviceAction) action, callbackId));
-//            }
+            } else {
+                LOG.debug("Starting action on battery device: {} that could be asleep", action);
+                eventBus.publish(new WaitForWakeUpAction((ZWaveDeviceAction) action, callbackId));
+            }
 
             return callbackId;
         }
     }
-//
-//    private void convertAndSendMessage(ZWaveAction action, int callbackId) throws HomeAutomationException {
-//        LOG.debug("Starting device action: {}", action);
-//        ZWaveRawMessage rawMessage = conversionManager.convert(v -> v.getClass().getSimpleName(), action);
-//        if (rawMessage != null) {
-//            rawMessage.setCallbackId(callbackId);
-//            rawMessage.setTransmitOptions(0x01 | 0x04 | 0x20);
-//
-//            connector.send(rawMessage);
-//        } else {
-//            LOG.error("Message could not be converted, cannot send action: {}", action);
-//        }
-//    }
-//
+
     @EventSubscribe
     public void receiveSendEvent(ActionConvertedEvent convertedAction) throws HomeAutomationException {
         LOG.debug("Converted action: {} sending to controller", convertedAction);

@@ -5,6 +5,7 @@ import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
 import com.oberasoftware.home.zwave.api.events.devices.NodeRegisteredEvent;
 import com.oberasoftware.home.zwave.api.events.devices.NodeUpdatedEvent;
+import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 import com.oberasoftware.home.zwave.core.NodeAvailability;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.NodeStatus;
@@ -39,6 +40,21 @@ public class NodeManagerImpl implements NodeManager {
         nodeMap.putIfAbsent(node.getNodeId(), node);
 
         eventBus.publish(new NodeRegisteredEvent(node.getNodeId(), node));
+    }
+
+    @Override
+    public void registerCommandClass(int nodeId, CommandClass commandClass) {
+        registerCommandClasses(nodeId, newArrayList(commandClass));
+    }
+
+    @Override
+    public void registerCommandClasses(int nodeId, List<CommandClass> commandClasses) {
+        ZWaveNode node = getNode(nodeId);
+
+        ZWaveNodeImpl newNode = new ZWaveNodeImpl(nodeId, node.getNodeStatus(), node.getAvailability(), node.getNodeInformation(), node.getManufactorInfoEvent());
+        node.getCommandClasses().forEach(newNode::addCommandClass);
+        commandClasses.forEach(newNode::addCommandClass);
+        replaceOrSetNode(newNode);
     }
 
     @Override

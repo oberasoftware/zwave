@@ -88,7 +88,7 @@ public class ZWaveRawMessage implements ZWaveMessage {
 	}
 
 	public ZWaveRawMessage(int nodeId, ControllerMessageType controllerMessageType, MessageType messageType, byte[] message, int callbackId) {
-		LOG.debug("Node Message: {} Creating message type: {} {}, type = {}",
+		LOG.trace("Node Message: {} Creating message type: {} {}, type = {}",
 				nodeId, controllerMessageType, toHexString(controllerMessageType.getKey()), messageType);
 		this.controllerMessageType = controllerMessageType;
 		this.messageType = messageType;
@@ -237,14 +237,6 @@ public class ZWaveRawMessage implements ZWaveMessage {
 	 */
 	public void setMessage(byte[] message) {
 		this.message = message;
-	}
-
-	/**
-	 * Gets the transmit options for this SendData Request.
-	 * @return the transmitOptions
-	 */
-	public int getTransmitOptions() {
-		return transmitOptions;
 	}
 
 	public boolean isValid() {

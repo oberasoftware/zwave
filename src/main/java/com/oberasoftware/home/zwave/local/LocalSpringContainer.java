@@ -17,7 +17,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 public class LocalSpringContainer {
     private static final AnnotationConfigApplicationContext CONTEXT = new AnnotationConfigApplicationContext(LocalSpringContainer.class);
 
-    static <T> T getBean(Class<T> type) {
+    public static <T> T getBean(Class<T> type) {
         return CONTEXT.getBean(type);
     }
 
