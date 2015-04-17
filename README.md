@@ -48,14 +48,14 @@ public class LocalZwaveSessionTest {
 
             int nodeId = 4;
             int dimmerLevel = 50;
-            s.doAction(new SwitchAction(() -> nodeId, SwitchAction.STATE.ON));
-            s.doAction(new SwitchAction(() -> nodeId, dimmerLevel));
+            s.doAction(new SwitchAction(nodeId, SwitchAction.STATE.ON));
+            s.doAction(new SwitchAction(nodeId, dimmerLevel));
 
             LOG.info("Waiting a bit to switch off so we can see some visual effect");
             sleepUninterruptibly(10, TimeUnit.SECONDS);
 
             LOG.info("Wait over, sending Off message");
-            s.doAction(new SwitchAction(() -> nodeId, SwitchAction.STATE.OFF));
+            s.doAction(new SwitchAction(nodeId, SwitchAction.STATE.OFF));
 
             LOG.info("Light off, preparing for shutdown in a bit");
             sleepUninterruptibly(3, TimeUnit.SECONDS);
@@ -93,14 +93,14 @@ public class LocalZwaveSessionTest {
         }
     }
 
-    private static class MyEventListener implements EventListener<ZWaveEvent> {
+    private static class MyEventListener implements EventHandler {
 
-        @Override
+        @EventSubcribe
         public void receive(ZWaveEvent event) throws Exception {
             LOG.debug("Received an event: {}", event);
         }
 
-        @Subscribe
+        @EventSubscribe
         public void handleSensorEvent(DeviceSensorEvent sensorEvent) {
             LOG.debug("Received a sensor: {} value: {} for node: {}", sensorEvent.getSensorType(), sensorEvent.getValue().doubleValue(), sensorEvent.getNodeId());
         }
