@@ -5,6 +5,6 @@ import com.oberasoftware.home.zwave.api.events.ZWaveEvent;
 /**
  * @author renarj
  */
-public interface ControllerEvent extends ZWaveEvent {
+public interface TransactionEvent extends ZWaveEvent {
     boolean isTransactionCompleted();
 }

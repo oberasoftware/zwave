@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -32,7 +31,7 @@ public class NodeManagerImpl implements NodeManager {
 
     @Override
     public void registerNode(int nodeId) {
-        registerNode(new ZWaveNodeImpl(nodeId, NodeStatus.UNKNOWN, NodeAvailability.UNKNOWN, Optional.empty(), Optional.empty()));
+        registerNode(new ZWaveNodeImpl(nodeId));
     }
 
     @Override
@@ -51,9 +50,29 @@ public class NodeManagerImpl implements NodeManager {
     public void registerCommandClasses(int nodeId, List<CommandClass> commandClasses) {
         ZWaveNode node = getNode(nodeId);
 
-        ZWaveNodeImpl newNode = new ZWaveNodeImpl(nodeId, node.getNodeStatus(), node.getAvailability(), node.getNodeInformation(), node.getManufactorInfoEvent());
-        node.getCommandClasses().forEach(newNode::addCommandClass);
+        ZWaveNodeImpl newNode = node.cloneNode();
         commandClasses.forEach(newNode::addCommandClass);
+
+        replaceOrSetNode(newNode);
+    }
+
+    @Override
+    public void registerEndpoints(int nodeId, List<Integer> endpointIds) {
+        ZWaveNode node = getNode(nodeId);
+
+        ZWaveNodeImpl newNode = node.cloneNode();
+        endpointIds.forEach(newNode::addEndpoint);
+
+        replaceOrSetNode(newNode);
+    }
+
+    @Override
+    public void setNodeProperty(int nodeId, String key, Object value) {
+        ZWaveNode node = getNode(nodeId);
+
+        ZWaveNodeImpl newNode = node.cloneNode();
+        newNode.addProperty(key, value);
+
         replaceOrSetNode(newNode);
     }
 
@@ -66,7 +85,7 @@ public class NodeManagerImpl implements NodeManager {
     public ZWaveNode setNodeAvailability(int nodeId, NodeAvailability availability) {
         ZWaveNode node = getNode(nodeId);
 
-        return replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId(), node.getNodeStatus(), availability, node.getNodeInformation(), node.getManufactorInfoEvent()));
+        return replaceOrSetNode(node.cloneNode().setAvailability(availability));
     }
 
     @Override
@@ -80,7 +99,7 @@ public class NodeManagerImpl implements NodeManager {
     public ZWaveNode setNodeStatus(int nodeId, NodeStatus nodeStatus) {
         ZWaveNode node = getNode(nodeId);
 
-        return replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId(), nodeStatus, node.getAvailability(), node.getNodeInformation(), node.getManufactorInfoEvent()));
+        return replaceOrSetNode(node.cloneNode().setNodeStatus(nodeStatus));
     }
 
     @Override
@@ -92,14 +111,14 @@ public class NodeManagerImpl implements NodeManager {
     public void setNodeInformation(int nodeId, NodeIdentifyEvent nodeIdentifyEvent) {
         ZWaveNode node = getNode(nodeId);
 
-        replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId(), node.getNodeStatus(), node.getAvailability(), Optional.of(nodeIdentifyEvent), node.getManufactorInfoEvent()));
+        replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId()).setNodeInformation(nodeIdentifyEvent));
     }
 
     @Override
     public void setNodeInformation(int nodeId, ManufactorInfoEvent manufactorInfoEvent) {
         ZWaveNode node = getNode(nodeId);
 
-        replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId(), node.getNodeStatus(), node.getAvailability(), node.getNodeInformation(), Optional.of(manufactorInfoEvent)));
+        replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId()).setManufacturerInformation(manufactorInfoEvent));
     }
 
     private ZWaveNode replaceOrSetNode(ZWaveNode node) {

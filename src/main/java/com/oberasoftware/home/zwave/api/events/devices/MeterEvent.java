@@ -1,5 +1,6 @@
 package com.oberasoftware.home.zwave.api.events.devices;
 
+import com.oberasoftware.home.zwave.api.events.controller.TransactionEvent;
 import com.oberasoftware.home.zwave.api.messages.types.MeterScale;
 import com.oberasoftware.home.zwave.api.messages.types.MeterType;
 
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 /**
  * @author renarj
  */
-public class MeterEvent implements DeviceEvent {
+public class MeterEvent implements TransactionEvent, DeviceEvent {
     private final int nodeId;
     private final int endpointId;
     private final BigDecimal value;
@@ -21,6 +22,11 @@ public class MeterEvent implements DeviceEvent {
         this.value = value;
         this.meterType = meterType;
         this.scale = scale;
+    }
+
+    @Override
+    public boolean isTransactionCompleted() {
+        return true;
     }
 
     @Override

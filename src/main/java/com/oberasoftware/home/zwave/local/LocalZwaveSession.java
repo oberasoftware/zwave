@@ -1,6 +1,7 @@
 package com.oberasoftware.home.zwave.local;
 
 import com.oberasoftware.base.event.EventHandler;
+import com.oberasoftware.home.spring.LocalSpringContainer;
 import com.oberasoftware.home.zwave.ZWaveController;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveIntervalAction;

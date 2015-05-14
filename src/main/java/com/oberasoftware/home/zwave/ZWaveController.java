@@ -9,7 +9,7 @@ import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.actions.controller.ControllerCapabilitiesAction;
 import com.oberasoftware.home.zwave.api.actions.controller.ControllerInitialDataAction;
 import com.oberasoftware.home.zwave.api.actions.controller.GetControllerIdAction;
-import com.oberasoftware.home.zwave.api.events.controller.ControllerIdEvent;
+import com.oberasoftware.home.zwave.api.events.controller.TransactionIdEvent;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.NodeStatus;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
@@ -39,7 +39,7 @@ public class ZWaveController implements Controller, EventHandler {
     @Autowired
     private TransactionManager transactionManager;
 
-    private ControllerIdEvent controllerIdEvent;
+    private TransactionIdEvent controllerIdEvent;
 
     @PreDestroy
     public void disconnect() throws HomeAutomationException {
@@ -86,7 +86,7 @@ public class ZWaveController implements Controller, EventHandler {
     }
 
     @EventSubscribe
-    public void receive(ControllerIdEvent event) throws Exception {
+    public void receive(TransactionIdEvent event) throws Exception {
         LOG.info("Received controller information: {}", event);
 
         this.controllerIdEvent = event;

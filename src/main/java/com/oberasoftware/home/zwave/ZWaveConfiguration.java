@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
  * @author renarj
  */
 @Configuration
-@ComponentScan
+@ComponentScan()
 @Import(BaseConfiguration.class)
 public class ZWaveConfiguration {
 }

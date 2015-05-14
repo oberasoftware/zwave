@@ -5,7 +5,7 @@ import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.base.event.EventSubscribe;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
-import com.oberasoftware.home.zwave.api.events.controller.ControllerEvent;
+import com.oberasoftware.home.zwave.api.events.controller.TransactionEvent;
 import com.oberasoftware.home.zwave.api.actions.devices.WaitForWakeUpAction;
 import com.oberasoftware.home.zwave.api.ControllerConnector;
 import com.oberasoftware.home.zwave.core.NodeManager;
@@ -93,9 +93,9 @@ public class TransactionManagerImpl implements TransactionManager, EventHandler 
     }
 
     @EventSubscribe
-    public void completeTransaction(ControllerEvent controllerEvent) throws HomeAutomationException {
-        if(controllerEvent.isTransactionCompleted()) {
-            LOG.debug("Received an event: {} that completes a transaction", controllerEvent);
+    public void completeTransaction(TransactionEvent transactionEvent) throws HomeAutomationException {
+        if(transactionEvent.isTransactionCompleted()) {
+            LOG.debug("Received an event: {} that completes a transaction", transactionEvent);
             connector.completeTransaction();
         }
     }

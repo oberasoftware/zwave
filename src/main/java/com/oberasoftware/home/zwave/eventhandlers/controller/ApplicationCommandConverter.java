@@ -19,7 +19,7 @@ import static java.util.Arrays.copyOfRange;
 @Component
 public class ApplicationCommandConverter implements ZWaveConverter {
 
-    private static final int DEFAULT_ENDPOINT_ID = 1;
+    private static final int DEFAULT_ENDPOINT_ID = 0;
     private static final int MESSAGE_OFFSET = 4;
     private static final int NODE_ID_INDEX = 1;
     private static final int COMMAND_CLASS_INDEX = 3;
