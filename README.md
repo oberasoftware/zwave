@@ -38,6 +38,7 @@ public class LocalZwaveSessionTest {
         LOG.debug("Application startup");
         try {
             ZWaveSession s = new LocalZwaveSession();
+            s.connect();
 
             while(!s.isNetworkReady()) {
                 LOG.info("Network not ready yet, sleeping");
@@ -87,6 +88,7 @@ public class LocalZwaveSessionTest {
         LOG.debug("Application startup");
         try {
             ZWaveSession s = new LocalZwaveSession();
+            s.connect();
             s.subscribe(new MyEventListener());
         } catch (HomeAutomationException e) {
             LOG.error("Error occurred in ZWave processing", e);
