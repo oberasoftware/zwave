@@ -50,4 +50,13 @@ public class MeterGetAction implements ZWaveDeviceAction, ZWaveIntervalAction {
     public int getEndpointId() {
         return endpointId;
     }
+
+    @Override
+    public String toString() {
+        return "MeterGetAction{" +
+                "nodeId=" + nodeId +
+                ", endpointId=" + endpointId +
+                ", scale=" + scale +
+                '}';
+    }
 }

@@ -10,7 +10,9 @@ import com.oberasoftware.home.zwave.api.messages.types.BasicDeviceClass;
 import com.oberasoftware.home.zwave.api.messages.types.ControllerMessageType;
 import com.oberasoftware.home.zwave.api.messages.types.GenericDeviceClass;
 import com.oberasoftware.home.zwave.api.messages.types.SpecificDeviceClass;
+import com.oberasoftware.home.zwave.threading.SenderThread;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -24,10 +26,17 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class IdentifyNodeConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(IdentifyNodeConverter.class);
 
+    @Autowired
+    private SenderThread senderThread;
+
     @SupportsConversion(controllerMessage = ControllerMessageType.IdentifyNode)
     @EventSubscribe
     public NodeIdentifyEvent convert(ZWaveRawMessage source) throws HomeAutomationException {
         LOG.debug("Handling incoming node information event: {}", source);
+
+        ZWaveRawMessage lastSentMessage = senderThread.getLastMessage();
+        int nodeId = lastSentMessage.getMessageByte(0);
+        LOG.debug("Received node information from node: {} based on last message: {}", nodeId, lastSentMessage);
 
         byte[] message = source.getMessage();
 
@@ -40,12 +49,12 @@ public class IdentifyNodeConverter implements ZWaveConverter {
         GenericDeviceClass genericDeviceClass = GenericDeviceClass.getType(message[4]).get();
         Optional<SpecificDeviceClass> optionalSpecificClass = SpecificDeviceClass.getType(genericDeviceClass, message[5]);
 
-        LOG.info("Basic device class: {}", basicDeviceClass);
-        LOG.info("Generic device class: {}", genericDeviceClass);
-        LOG.info("Specific device class: {}", optionalSpecificClass);
+        LOG.debug("Basic device class: {}", basicDeviceClass);
+        LOG.debug("Generic device class: {}", genericDeviceClass);
+        LOG.debug("Specific device class: {}", optionalSpecificClass);
 
         SpecificDeviceClass specificDeviceClass = optionalSpecificClass.isPresent() ? optionalSpecificClass.get() : null;
 
-        return new NodeIdentifyEvent(listening, frequentlyListening, routing, version, basicDeviceClass, genericDeviceClass, specificDeviceClass);
+        return new NodeIdentifyEvent(nodeId, listening, frequentlyListening, routing, version, basicDeviceClass, genericDeviceClass, specificDeviceClass);
     }
 }

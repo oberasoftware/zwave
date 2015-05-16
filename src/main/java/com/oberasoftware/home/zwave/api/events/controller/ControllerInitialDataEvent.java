@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author renarj
  */
-public class ControllerInitialDataEvent implements ControllerEvent {
+public class ControllerInitialDataEvent implements TransactionEvent {
     public enum MODE {
         SLAVE,
         CONTROLLER

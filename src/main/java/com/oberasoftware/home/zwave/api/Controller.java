@@ -11,7 +11,7 @@ public interface Controller {
 
     int getControllerId();
 
-    <T> void subscribe(EventHandler topicListener);
+    void subscribe(EventHandler topicListener);
 
     int send(ZWaveAction message) throws HomeAutomationException;
 

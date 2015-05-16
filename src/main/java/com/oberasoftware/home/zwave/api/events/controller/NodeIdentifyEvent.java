@@ -7,17 +7,19 @@ import com.oberasoftware.home.zwave.api.messages.types.SpecificDeviceClass;
 /**
  * @author renarj
  */
-public class NodeIdentifyEvent implements ControllerEvent {
+public class NodeIdentifyEvent implements TransactionEvent {
     private final boolean listening;
     private final boolean frequentListener;
     private final boolean routing;
     private final int version;
+    private final int nodeId;
 
     private final BasicDeviceClass basicDeviceClass;
     private final GenericDeviceClass genericDeviceClass;
     private final SpecificDeviceClass specificDeviceClass;
 
-    public NodeIdentifyEvent(boolean listening, boolean frequentListener, boolean routing, int version, BasicDeviceClass basicDeviceClass, GenericDeviceClass genericDeviceClass, SpecificDeviceClass specificDeviceClass) {
+    public NodeIdentifyEvent(int nodeId, boolean listening, boolean frequentListener, boolean routing, int version, BasicDeviceClass basicDeviceClass, GenericDeviceClass genericDeviceClass, SpecificDeviceClass specificDeviceClass) {
+        this.nodeId = nodeId;
         this.listening = listening;
         this.frequentListener = frequentListener;
         this.routing = routing;
@@ -25,6 +27,10 @@ public class NodeIdentifyEvent implements ControllerEvent {
         this.basicDeviceClass = basicDeviceClass;
         this.genericDeviceClass = genericDeviceClass;
         this.specificDeviceClass = specificDeviceClass;
+    }
+
+    public int getNodeId() {
+        return nodeId;
     }
 
     public boolean isListening() {
@@ -62,11 +68,15 @@ public class NodeIdentifyEvent implements ControllerEvent {
 
     @Override
     public String toString() {
-        return "NodeInformationEvent{" +
+        return "NodeIdentifyEvent{" +
                 "listening=" + listening +
                 ", frequentListener=" + frequentListener +
                 ", routing=" + routing +
                 ", version=" + version +
+                ", nodeId=" + nodeId +
+                ", basicDeviceClass=" + basicDeviceClass +
+                ", genericDeviceClass=" + genericDeviceClass +
+                ", specificDeviceClass=" + specificDeviceClass +
                 '}';
     }
 }

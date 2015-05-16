@@ -11,8 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Optional;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.times;
@@ -32,13 +30,13 @@ public class NodeManagerTest {
 
     @Test
     public void testMinimalStatus() {
-        nodeManager.registerNode(new ZWaveNodeImpl(1, NodeStatus.IDENTIFIED, NodeAvailability.AVAILABLE, Optional.empty(), Optional.empty()));
-        nodeManager.registerNode(new ZWaveNodeImpl(2, NodeStatus.IDENTIFIED, NodeAvailability.AVAILABLE, Optional.empty(), Optional.empty()));
-        nodeManager.registerNode(new ZWaveNodeImpl(3, NodeStatus.IDENTIFIED, NodeAvailability.AVAILABLE, Optional.empty(), Optional.empty()));
+        nodeManager.registerNode(new ZWaveNodeImpl(1).setNodeStatus(NodeStatus.IDENTIFIED).setAvailability(NodeAvailability.AVAILABLE));
+        nodeManager.registerNode(new ZWaveNodeImpl(2).setNodeStatus(NodeStatus.IDENTIFIED).setAvailability(NodeAvailability.AVAILABLE));
+        nodeManager.registerNode(new ZWaveNodeImpl(3).setNodeStatus(NodeStatus.IDENTIFIED).setAvailability(NodeAvailability.AVAILABLE));
 
         assertThat(nodeManager.haveNodeMinimalStatus(NodeStatus.IDENTIFIED), is(true));
 
-        nodeManager.registerNode(new ZWaveNodeImpl(4, NodeStatus.INITIALIZING, NodeAvailability.AVAILABLE, Optional.empty(), Optional.empty()));
+        nodeManager.registerNode(new ZWaveNodeImpl(4).setNodeStatus(NodeStatus.INITIALIZING).setAvailability(NodeAvailability.AVAILABLE));
         assertThat(nodeManager.haveNodeMinimalStatus(NodeStatus.IDENTIFIED), is(false));
 
         assertThat(nodeManager.haveNodeMinimalStatus(NodeStatus.ACTIVE), is(false));
@@ -47,7 +45,7 @@ public class NodeManagerTest {
 
     @Test
     public void testNotifications() {
-        nodeManager.registerNode(new ZWaveNodeImpl(1, NodeStatus.IDENTIFIED, NodeAvailability.AVAILABLE, Optional.empty(), Optional.empty()));
+        nodeManager.registerNode(new ZWaveNodeImpl(1).setNodeStatus(NodeStatus.IDENTIFIED).setAvailability(NodeAvailability.AVAILABLE));
 
         ArgumentCaptor<NodeRegisteredEvent> newDeviceEventCaptor = ArgumentCaptor.forClass(NodeRegisteredEvent.class);
         verify(bus, times(1)).publish(newDeviceEventCaptor.capture());

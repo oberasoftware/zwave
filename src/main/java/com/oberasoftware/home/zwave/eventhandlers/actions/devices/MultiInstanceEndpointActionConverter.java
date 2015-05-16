@@ -23,6 +23,7 @@ public class MultiInstanceEndpointActionConverter implements ZWaveConverter {
     private static final Logger LOG = getLogger(MultiInstanceEndpointActionConverter.class);
 
     private static final int MULTI_INSTANCE_GET = 0x04;
+    private static final int MULTI_CHANNEL_ENDPOINT_GET = 0x07;
 
     @Autowired
     private NodeManager nodeManager;
@@ -33,26 +34,10 @@ public class MultiInstanceEndpointActionConverter implements ZWaveConverter {
 
         int nodeId = action.getNodeId();
 
-        nodeManager.getNode(nodeId).getCommandClasses().forEach(c -> LOG.info("Supported command class: {} for node: {}", c, nodeId));
-
-        ActionConverterBuilder.create(ControllerMessageType.SendData, MessageType.Request, nodeId)
+        return ActionConverterBuilder.create(ControllerMessageType.SendData, MessageType.Request, nodeId)
                 .addCommandClass(CommandClass.MULTI_INSTANCE)
-                .addInt(MULTI_INSTANCE_GET);
-
-        return null;
+                .addInt(MULTI_CHANNEL_ENDPOINT_GET)
+                .callback(callbackId)
+                .construct();
     }
-
-//    public SerialMessage getMultiInstanceGetMessage(CommandClass commandClass) {
-//        logger.debug("NODE {}: Creating new message for application command MULTI_INSTANCE_GET command class {}", this.getNode().getNodeId(), commandClass.getLabel());
-//        SerialMessage result = new SerialMessage(this.getNode().getNodeId(), SerialMessageClass.SendData, SerialMessageType.Request, SerialMessageClass.ApplicationCommandHandler, SerialMessagePriority.Get);
-//        byte[] newPayload = { 	(byte) this.getNode().getNodeId(),
-//                3,
-//                (byte) getCommandClass().getKey(),
-//                (byte) MULTI_INSTANCE_GET,
-//                (byte) commandClass.getKey()
-//        };
-//        result.setMessagePayload(newPayload);
-//        return result;
-//    }
-
 }

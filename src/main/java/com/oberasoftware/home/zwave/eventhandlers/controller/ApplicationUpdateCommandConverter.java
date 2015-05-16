@@ -1,15 +1,14 @@
 package com.oberasoftware.home.zwave.eventhandlers.controller;
 
-import com.google.common.collect.Lists;
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.zwave.api.events.devices.NodeInfoReceivedEvent;
-import com.oberasoftware.home.zwave.api.events.SupportsConversion;
 import com.oberasoftware.home.zwave.api.ZWaveConverter;
-import com.oberasoftware.home.zwave.core.utils.MessageUtil;
-import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.api.events.SupportsConversion;
+import com.oberasoftware.home.zwave.api.events.devices.NodeInfoReceivedEvent;
 import com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage;
 import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 import com.oberasoftware.home.zwave.api.messages.types.ControllerMessageType;
+import com.oberasoftware.home.zwave.core.utils.MessageUtil;
+import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -56,9 +55,9 @@ public class ApplicationUpdateCommandConverter implements ZWaveConverter {
 
                 return new NodeInfoReceivedEvent(nodeId, commandClassList);
             default:
-                LOG.warn("Unsupported application update command received: {} for node: {}", command, nodeId);
+                LOG.debug("Unsupported application update command received: {} for node: {}", command, nodeId);
         }
 
-        return new NodeInfoReceivedEvent(nodeId, Lists.newArrayList());
+        return null;
     }
 }

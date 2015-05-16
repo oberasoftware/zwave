@@ -19,6 +19,10 @@ public interface NodeManager {
 
     void registerCommandClasses(int nodeId, List<CommandClass> commandClasses);
 
+    void registerEndpoints(int nodeId, List<Integer> endpointIds);
+
+    void setNodeProperty(int nodeId, String key, Object value);
+
     /**
      * This indicates if all nodes in the network have reached the minimal status specified
      * @param nodeStatus The minimal status that all nodes should have achieved

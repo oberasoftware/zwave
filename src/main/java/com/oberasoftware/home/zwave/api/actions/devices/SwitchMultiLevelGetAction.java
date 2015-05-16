@@ -5,10 +5,10 @@ import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 /**
  * @author renarj
  */
-public class MultiInstanceEndpointAction implements ZWaveDeviceAction {
+public class SwitchMultiLevelGetAction implements ZWaveDeviceAction {
     private final int nodeId;
 
-    public MultiInstanceEndpointAction(int nodeId) {
+    public SwitchMultiLevelGetAction(int nodeId) {
         this.nodeId = nodeId;
     }
 
@@ -19,7 +19,7 @@ public class MultiInstanceEndpointAction implements ZWaveDeviceAction {
 
     @Override
     public String toString() {
-        return "MultiInstanceEndpointAction{" +
+        return "SwitchMultiLevelGetAction{" +
                 "nodeId=" + nodeId +
                 '}';
     }

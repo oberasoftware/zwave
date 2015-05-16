@@ -5,11 +5,13 @@ import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 /**
  * @author renarj
  */
-public class MultiInstanceEndpointAction implements ZWaveDeviceAction {
+public class SwitchBinaryGetAction implements ZWaveDeviceAction {
     private final int nodeId;
+    private final int endpointId;
 
-    public MultiInstanceEndpointAction(int nodeId) {
+    public SwitchBinaryGetAction(int nodeId, int endpointId) {
         this.nodeId = nodeId;
+        this.endpointId = endpointId;
     }
 
     @Override
@@ -18,9 +20,15 @@ public class MultiInstanceEndpointAction implements ZWaveDeviceAction {
     }
 
     @Override
+    public int getEndpointId() {
+        return endpointId;
+    }
+
+    @Override
     public String toString() {
-        return "MultiInstanceEndpointAction{" +
+        return "BinarySwitchGetAction{" +
                 "nodeId=" + nodeId +
+                ", endpointId=" + endpointId +
                 '}';
     }
 }

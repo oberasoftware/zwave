@@ -9,14 +9,14 @@ import static java.lang.Integer.toHexString;
 /**
  * @author renarj
  */
-public class ControllerInformationEvent implements ControllerEvent {
+public class TransactionInformationEvent implements TransactionEvent {
     private final String apiVersion;
     private final int manufactorId;
     private final int deviceType;
     private final int deviceId;
     private final Set<CommandClass> supportedCommandClasses;
 
-    public ControllerInformationEvent(String apiVersion, int manufactorId, int deviceType, int deviceId, Set<CommandClass> supportedCommandClasses) {
+    public TransactionInformationEvent(String apiVersion, int manufactorId, int deviceType, int deviceId, Set<CommandClass> supportedCommandClasses) {
         this.apiVersion = apiVersion;
         this.manufactorId = manufactorId;
         this.deviceType = deviceType;

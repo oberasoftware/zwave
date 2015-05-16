@@ -1,4 +1,4 @@
-package com.oberasoftware.home.zwave.local;
+package com.oberasoftware.home.spring;
 
 import com.oberasoftware.home.zwave.ZWaveConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -21,7 +21,7 @@ public class LocalSpringContainer {
         return CONTEXT.getBean(type);
     }
 
-    static void destroy() {
+    public static void destroy() {
         CONTEXT.destroy();
     }
 

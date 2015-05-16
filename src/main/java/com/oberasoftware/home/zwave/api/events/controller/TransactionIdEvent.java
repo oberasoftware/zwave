@@ -3,11 +3,11 @@ package com.oberasoftware.home.zwave.api.events.controller;
 /**
  * @author renarj
  */
-public class ControllerIdEvent implements ControllerEvent {
+public class TransactionIdEvent implements TransactionEvent {
     private final int homeId;
     private final int controllerId;
 
-    public ControllerIdEvent(int homeId, int controllerId) {
+    public TransactionIdEvent(int homeId, int controllerId) {
         this.homeId = homeId;
         this.controllerId = controllerId;
     }

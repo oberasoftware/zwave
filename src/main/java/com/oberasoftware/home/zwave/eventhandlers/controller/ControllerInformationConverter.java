@@ -1,7 +1,7 @@
 package com.oberasoftware.home.zwave.eventhandlers.controller;
 
 import com.oberasoftware.base.event.EventSubscribe;
-import com.oberasoftware.home.zwave.api.events.controller.ControllerInformationEvent;
+import com.oberasoftware.home.zwave.api.events.controller.TransactionInformationEvent;
 import com.oberasoftware.home.zwave.api.events.SupportsConversion;
 import com.oberasoftware.home.zwave.api.ZWaveConverter;
 import com.oberasoftware.home.zwave.core.utils.MessageUtil;
@@ -27,7 +27,7 @@ public class ControllerInformationConverter implements ZWaveConverter {
 
     @SupportsConversion(controllerMessage = ControllerMessageType.GetCapabilities)
     @EventSubscribe
-    public ControllerInformationEvent convert(ZWaveRawMessage message) throws HomeAutomationException {
+    public TransactionInformationEvent convert(ZWaveRawMessage message) throws HomeAutomationException {
         byte[] payload = message.getMessage();
         LOG.debug("Handle Controller Information reuqest, message length {}", payload.length);
 
@@ -58,6 +58,6 @@ public class ControllerInformationConverter implements ZWaveConverter {
             }
         }
 
-        return new ControllerInformationEvent(serialAPIVersion, manufactureId, deviceType, deviceId, supportedCommandClasses);
+        return new TransactionInformationEvent(serialAPIVersion, manufactureId, deviceType, deviceId, supportedCommandClasses);
     }
 }

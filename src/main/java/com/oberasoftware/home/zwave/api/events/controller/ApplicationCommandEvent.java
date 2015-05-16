@@ -7,7 +7,7 @@ import static com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage.bb2hex;
 /**
  * @author renarj
  */
-public class ApplicationCommandEvent implements ControllerEvent {
+public class ApplicationCommandEvent implements TransactionEvent {
 
     private int nodeId;
     private int endpointId;

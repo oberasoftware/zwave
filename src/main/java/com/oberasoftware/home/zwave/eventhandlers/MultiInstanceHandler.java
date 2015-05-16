@@ -8,7 +8,7 @@ import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -21,7 +21,7 @@ public class MultiInstanceHandler implements EventHandler {
 
     @EventSubscribe
     public MultiInstanceEndpointAction receive(NodeUpdatedEvent nodeUpdatedEvent) {
-        List<CommandClass> commandClasses = nodeUpdatedEvent.getNode().getCommandClasses();
+        Set<CommandClass> commandClasses = nodeUpdatedEvent.getNode().getCommandClasses();
         boolean isMultiInstance = commandClasses.stream().anyMatch(c -> c == CommandClass.MULTI_INSTANCE);
 
         LOG.debug("Node updated: {}, checking for multi instance support: {}", nodeUpdatedEvent.getNodeId(), isMultiInstance);

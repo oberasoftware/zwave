@@ -3,6 +3,7 @@ package com.oberasoftware.home.zwave.api;
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.exceptions.ZWaveException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @author renarj
  */
 public interface ZWaveSession {
+    void connect() throws ZWaveException;
 
     boolean isNetworkReady();
 

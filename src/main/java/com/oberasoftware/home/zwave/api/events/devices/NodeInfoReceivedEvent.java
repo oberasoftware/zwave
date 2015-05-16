@@ -1,6 +1,6 @@
 package com.oberasoftware.home.zwave.api.events.devices;
 
-import com.oberasoftware.home.zwave.api.events.controller.ControllerEvent;
+import com.oberasoftware.home.zwave.api.events.controller.TransactionEvent;
 import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author renarj
  */
-public class NodeInfoReceivedEvent implements ControllerEvent {
+public class NodeInfoReceivedEvent implements TransactionEvent {
     private final int nodeId;
     private final List<CommandClass> commandClasses;
 

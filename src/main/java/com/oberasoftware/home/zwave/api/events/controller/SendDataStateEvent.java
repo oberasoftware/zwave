@@ -3,7 +3,7 @@ package com.oberasoftware.home.zwave.api.events.controller;
 /**
  * @author renarj
  */
-public class SendDataStateEvent implements ControllerEvent {
+public class SendDataStateEvent implements TransactionEvent {
     private final SEND_STATE state;
 
     public SendDataStateEvent(SEND_STATE state) {

@@ -10,8 +10,8 @@ public enum CommandClass {
     APPLICATION_STATUS(0x22, "APPLICATION_STATUS"),
     ZIP_SERVICES(0x23, "ZIP_SERVICES"),
     ZIP_SERVER(0x24, "ZIP_SERVER"),
-    SWITCH_BINARY(0x25, "SWITCH_BINARY"),
-    SWITCH_MULTILEVEL(0x26, "SWITCH_MULTILEVEL"),
+    SWITCH_BINARY(0x25, "SWITCH_BINARY", true, 0),
+    SWITCH_MULTILEVEL(0x26, "SWITCH_MULTILEVEL", true, 0),
     SWITCH_ALL(0x27, "SWITCH_ALL"),
     SWITCH_TOGGLE_BINARY(0x28, "SWITCH_TOGGLE_BINARY"),
     SWITCH_TOGGLE_MULTILEVEL(0x29, "SWITCH_TOGGLE_MULTILEVEL"),
@@ -23,7 +23,7 @@ public enum CommandClass {
     ZIP_ADV_SERVICES(0x2F, "ZIP_ADV_SERVICES"),
     SENSOR_BINARY(0x30, "SENSOR_BINARY"),
     SENSOR_MULTILEVEL(0x31, "SENSOR_MULTILEVEL"),
-    METER(0x32, "METER"),
+    METER(0x32, "METER", true, 60),
     ZIP_ADV_SERVER(0x33, "ZIP_ADV_SERVER"),
     ZIP_ADV_CLIENT(0x34, "ZIP_ADV_CLIENT"),
     METER_PULSE(0x35, "METER_PULSE"),
@@ -90,12 +90,24 @@ public enum CommandClass {
     NON_INTEROPERABLE(0xF0, "NON_INTEROPERABLE"),
     ALL(-1, null);
 
-    private int classCode;
-    private String label;
+    private final int classCode;
+    private final String label;
+    private final int secondsRefreshInterval;
+    private final boolean supportsPolling;
 
     CommandClass(int classCode, String label) {
+        this(classCode, label, false, 0);
+    }
+
+    CommandClass(int classCode, String label, boolean supportsPolling, int secondsRefreshInterval) {
         this.classCode = classCode;
+        this.supportsPolling = supportsPolling;
+        this.secondsRefreshInterval = secondsRefreshInterval;
         this.label = label;
+    }
+
+    public boolean isPollingSupported() {
+        return supportsPolling;
     }
 
     public int getClassCode() {
@@ -104,5 +116,9 @@ public enum CommandClass {
 
     public String getLabel() {
         return label;
+    }
+
+    public int getSecondsRefreshInterval() {
+        return secondsRefreshInterval;
     }
 }
