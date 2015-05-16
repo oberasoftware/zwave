@@ -16,4 +16,11 @@ public class MultiInstanceEndpointAction implements ZWaveDeviceAction {
     public int getNodeId() {
         return nodeId;
     }
+
+    @Override
+    public String toString() {
+        return "MultiInstanceEndpointAction{" +
+                "nodeId=" + nodeId +
+                '}';
+    }
 }

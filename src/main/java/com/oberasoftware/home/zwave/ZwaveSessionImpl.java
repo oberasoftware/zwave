@@ -7,6 +7,7 @@ import com.oberasoftware.home.zwave.api.ZWaveScheduler;
 import com.oberasoftware.home.zwave.api.ZWaveSession;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.exceptions.ZWaveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,16 @@ public class ZwaveSessionImpl implements ZWaveSession {
     private ZWaveScheduler zWaveScheduler;
 
     @Autowired
+    private SerialZWaveConnector zWaveConnector;
+
+    @Autowired
     private NodeManager nodeManager;
+
+    @Override
+    public void connect() throws ZWaveException {
+        zWaveConnector.connect();
+        zWaveController.initializeNetwork();
+    }
 
     @Override
     public boolean isNetworkReady() {

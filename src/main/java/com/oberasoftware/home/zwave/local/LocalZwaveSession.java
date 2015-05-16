@@ -2,6 +2,7 @@ package com.oberasoftware.home.zwave.local;
 
 import com.oberasoftware.base.event.EventHandler;
 import com.oberasoftware.home.spring.LocalSpringContainer;
+import com.oberasoftware.home.zwave.SerialZWaveConnector;
 import com.oberasoftware.home.zwave.ZWaveController;
 import com.oberasoftware.home.zwave.api.ZWaveAction;
 import com.oberasoftware.home.zwave.api.ZWaveIntervalAction;
@@ -9,6 +10,7 @@ import com.oberasoftware.home.zwave.api.ZWaveScheduler;
 import com.oberasoftware.home.zwave.api.ZWaveSession;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.exceptions.HomeAutomationException;
+import com.oberasoftware.home.zwave.exceptions.ZWaveException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +20,12 @@ import java.util.concurrent.TimeUnit;
 public class LocalZwaveSession implements ZWaveSession {
 
     public LocalZwaveSession() {
+
+    }
+
+    @Override
+    public void connect() throws ZWaveException {
+        LocalSpringContainer.getBean(SerialZWaveConnector.class).connect();
         LocalSpringContainer.getBean(ZWaveController.class).initializeNetwork();
     }
 

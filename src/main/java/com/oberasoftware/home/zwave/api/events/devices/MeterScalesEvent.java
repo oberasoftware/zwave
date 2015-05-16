@@ -1,23 +1,22 @@
 package com.oberasoftware.home.zwave.api.events.devices;
 
 import com.oberasoftware.home.zwave.api.events.controller.TransactionEvent;
+import com.oberasoftware.home.zwave.api.messages.types.MeterScale;
+
+import java.util.List;
 
 /**
  * @author renarj
  */
-public class SwitchEvent implements DeviceEvent, TransactionEvent {
+public class MeterScalesEvent implements DeviceEvent, TransactionEvent {
     private final int nodeId;
-    private final boolean on;
     private final int endpointId;
+    private final List<MeterScale> scales;
 
-    public SwitchEvent(int nodeId, boolean on) {
-        this(nodeId, 0, on);
-    }
-
-    public SwitchEvent(int nodeId, int endpointId, boolean on) {
+    public MeterScalesEvent(int nodeId, int endpointId, List<MeterScale> scales) {
         this.nodeId = nodeId;
         this.endpointId = endpointId;
-        this.on = on;
+        this.scales = scales;
     }
 
     @Override
@@ -25,12 +24,12 @@ public class SwitchEvent implements DeviceEvent, TransactionEvent {
         return nodeId;
     }
 
-    public boolean isOn() {
-        return on;
-    }
-
     public int getEndpointId() {
         return endpointId;
+    }
+
+    public List<MeterScale> getScales() {
+        return scales;
     }
 
     @Override
@@ -40,10 +39,10 @@ public class SwitchEvent implements DeviceEvent, TransactionEvent {
 
     @Override
     public String toString() {
-        return "SwitchEvent{" +
+        return "MeterScalesEvent{" +
                 "nodeId=" + nodeId +
-                ", on=" + on +
                 ", endpointId=" + endpointId +
+                ", scales=" + scales +
                 '}';
     }
 }

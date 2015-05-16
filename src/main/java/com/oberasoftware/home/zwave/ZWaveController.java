@@ -66,7 +66,7 @@ public class ZWaveController implements Controller, EventHandler {
     }
 
     @Override
-    public <T> void subscribe(EventHandler eventListener) {
+    public void subscribe(EventHandler eventListener) {
         eventBus.registerHandler(eventListener);
     }
 

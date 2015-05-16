@@ -1,9 +1,11 @@
 package com.oberasoftware.home.zwave.api.events.devices;
 
+import com.oberasoftware.home.zwave.api.events.controller.TransactionEvent;
+
 /**
  * @author renarj
  */
-public class SwitchLevelEvent implements DeviceEvent {
+public class SwitchLevelEvent implements DeviceEvent, TransactionEvent {
     private final int nodeId;
     private final int value;
 
@@ -19,6 +21,11 @@ public class SwitchLevelEvent implements DeviceEvent {
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public boolean isTransactionCompleted() {
+        return true;
     }
 
     @Override

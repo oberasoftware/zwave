@@ -10,6 +10,7 @@ import com.oberasoftware.home.zwave.core.NodeAvailability;
 import com.oberasoftware.home.zwave.core.NodeManager;
 import com.oberasoftware.home.zwave.core.NodeStatus;
 import com.oberasoftware.home.zwave.core.ZWaveNode;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +19,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author renarj
  */
 @Component
 public class NodeManagerImpl implements NodeManager {
+    private static final Logger LOG = getLogger(NodeManagerImpl.class);
+
     private Map<Integer, ZWaveNode> nodeMap = new ConcurrentHashMap<>();
 
     @Autowired
@@ -92,7 +96,11 @@ public class NodeManagerImpl implements NodeManager {
     public boolean isBatteryDevice(int nodeId) {
         ZWaveNode node = getNode(nodeId);
 
-        return node != null && node.getNodeInformation().isPresent() && !node.getNodeInformation().get().isListening();
+        boolean isBattery = node != null && node.getNodeInformation().isPresent() && !node.getNodeInformation().get().isListening();
+
+        LOG.debug("Checking if node: {} is battery device: {}", node, isBattery);
+
+        return isBattery;
     }
 
     @Override
@@ -111,18 +119,19 @@ public class NodeManagerImpl implements NodeManager {
     public void setNodeInformation(int nodeId, NodeIdentifyEvent nodeIdentifyEvent) {
         ZWaveNode node = getNode(nodeId);
 
-        replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId()).setNodeInformation(nodeIdentifyEvent));
+        replaceOrSetNode(node.cloneNode().setNodeInformation(nodeIdentifyEvent));
     }
 
     @Override
     public void setNodeInformation(int nodeId, ManufactorInfoEvent manufactorInfoEvent) {
         ZWaveNode node = getNode(nodeId);
 
-        replaceOrSetNode(new ZWaveNodeImpl(node.getNodeId()).setManufacturerInformation(manufactorInfoEvent));
+        replaceOrSetNode(node.cloneNode().setManufacturerInformation(manufactorInfoEvent));
     }
 
     private ZWaveNode replaceOrSetNode(ZWaveNode node) {
         int nodeId = node.getNodeId();
+        LOG.debug("Updating information of node: {} to: {}", nodeId, node);
         nodeMap.put(nodeId, node);
 
         eventBus.publish(new NodeUpdatedEvent(node.getNodeId(), node));

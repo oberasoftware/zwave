@@ -1,11 +1,11 @@
 package com.oberasoftware.home.zwave.api.actions.devices;
 
-import com.oberasoftware.home.zwave.api.ZWaveAction;
+import com.oberasoftware.home.zwave.api.ZWaveDeviceAction;
 
 /**
  * @author renarj
  */
-public class RequestNodeInfoAction implements ZWaveAction {
+public class RequestNodeInfoAction implements ZWaveDeviceAction {
 
     private final int nodeId;
 

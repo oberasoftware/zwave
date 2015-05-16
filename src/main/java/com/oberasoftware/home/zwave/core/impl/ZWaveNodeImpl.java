@@ -145,11 +145,13 @@ public class ZWaveNodeImpl implements ZWaveNode {
     public String toString() {
         return "ZWaveNodeImpl{" +
                 "nodeId=" + nodeId +
-                ", endpoints=" + endpoints +
                 ", nodeStatus=" + nodeStatus +
                 ", availability=" + availability +
-                ", nodeInformation=" + (optionalNodeInformation.isPresent() ? optionalNodeInformation.get().toString() : "") +
-                ", manufacturerInformation=" + (optionalManufacturerInformation.isPresent() ? optionalManufacturerInformation.get().toString() : "") +
+                ", optionalNodeInformation=" + optionalNodeInformation +
+                ", optionalManufacturerInformation=" + optionalManufacturerInformation +
+                ", commandClasses=" + commandClasses +
+                ", endpoints=" + endpoints +
+                ", nodeProperties=" + nodeProperties +
                 '}';
     }
 }

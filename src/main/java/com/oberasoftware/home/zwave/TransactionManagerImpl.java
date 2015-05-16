@@ -83,9 +83,6 @@ public class TransactionManagerImpl implements TransactionManager, EventHandler 
 
                 //we can send if the device is a battery device that is awake, or if not a battery device at all
                 return (batteryDevice && node.getAvailability() == AWAKE) || !batteryDevice;
-            } else {
-                LOG.warn("We have no node information for node: {} device is not ready", ((ZWaveDeviceAction) action).getNodeId());
-                return false;
             }
         }
 

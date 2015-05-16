@@ -27,8 +27,8 @@ public class SwitchBinaryActionGetConverter implements EventHandler {
     @EventSubscribe
     public ActionConvertedEvent convert(SwitchBinaryGetAction action) {
         LOG.debug("Generating serial message for binary switch GET for node: {} and endpoint: {}", action.getNodeId(), action.getEndpointId());
-        return ActionConverterBuilder.create(ControllerMessageType.SendData, MessageType.Request, action.getNodeId())
-                .addCommandClass(CommandClass.SWITCH_MULTILEVEL)
+        return ActionConverterBuilder.create(ControllerMessageType.SendData, MessageType.Request, action)
+                .addCommandClass(CommandClass.SWITCH_BINARY)
                 .addInt(SWITCH_BINARY_GET)
                 .construct();
     }

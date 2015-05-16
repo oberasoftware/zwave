@@ -18,14 +18,14 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 @Component
 public class SwitchBinaryConverter implements EventHandler {
-    private static final Logger LOG = getLogger(SwitchMultiLevelReportConverter.class);
+    private static final Logger LOG = getLogger(SwitchBinaryConverter.class);
 
     private static final int SWITCH_BINARY_SET = 0x01;
     private static final int SWITCH_BINARY_GET = 0x02;
     private static final int SWITCH_BINARY_REPORT = 0x03;
 
     @EventSubscribe
-    @SupportsConversion(commandClass = CommandClass.SWITCH_MULTILEVEL)
+    @SupportsConversion(commandClass = CommandClass.SWITCH_BINARY)
     public DeviceEvent convert(ApplicationCommandEvent source) throws HomeAutomationException {
         LOG.debug("Received binary switch report from node: {}", source.getNodeId());
         byte[] payload = source.getPayload();
@@ -37,7 +37,7 @@ public class SwitchBinaryConverter implements EventHandler {
 
                 LOG.debug("Processing binary switch report for node: {} found value: {}", source.getNodeId(), value);
 
-                boolean state = value > 0;
+                boolean state = value != 0x00;
                 return new SwitchEvent(source.getNodeId(), source.getEndpointId(), state);
             case SWITCH_BINARY_GET:
             default:

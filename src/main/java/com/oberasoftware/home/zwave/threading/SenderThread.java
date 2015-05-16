@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
 import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.ZWAVE_RESPONSE_TIMEOUT;
-import static com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage.bb2hex;
 
 /**
  * @author Renze de Vries
@@ -60,7 +59,7 @@ public class SenderThread extends Thread {
 
                     if (barrier.tryAcquire(1, zWaveResponseTimeout, TimeUnit.MILLISECONDS)) {
                         long responseTime = System.currentTimeMillis() - messageTimeStart;
-                        LOG.info("Response processed after {} ms.", responseTime);
+                        LOG.info("Response processed after {} ms. for message: {}", responseTime, sendMessage);
                     } else {
                         if(sendMessage.getRetries() == 0) {
                             sendMessage.incrementRetry();
@@ -87,7 +86,7 @@ public class SenderThread extends Thread {
 
     private void sendRawMessage(ZWaveRawMessage zWaveRawMessage) {
         byte[] buffer = zWaveRawMessage.getMessageBuffer();
-        LOG.debug("Sending Message = " + bb2hex(buffer));
+        LOG.debug("Sending Message: {}", zWaveRawMessage);
         try {
             OutputStream outputStream = serialZWaveConnector.getOutputStream();
             outputStream.write(buffer);

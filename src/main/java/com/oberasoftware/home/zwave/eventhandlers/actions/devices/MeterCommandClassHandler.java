@@ -9,6 +9,7 @@ import com.oberasoftware.home.zwave.api.events.ActionConvertedEvent;
 import com.oberasoftware.home.zwave.api.events.SupportsConversion;
 import com.oberasoftware.home.zwave.api.events.controller.ApplicationCommandEvent;
 import com.oberasoftware.home.zwave.api.events.devices.MeterEvent;
+import com.oberasoftware.home.zwave.api.events.devices.MeterScalesEvent;
 import com.oberasoftware.home.zwave.api.messages.types.CommandClass;
 import com.oberasoftware.home.zwave.api.messages.types.ControllerMessageType;
 import com.oberasoftware.home.zwave.api.messages.types.MessageType;
@@ -74,14 +75,14 @@ public class MeterCommandClassHandler implements ZWaveConverter {
     }
 
     private List<Event> handleMeterSupportReport(int nodeId, int endpointId, byte[] payload) {
-        LOG.debug("Processing meter support report for node: {]", nodeId);
+        LOG.debug("Processing meter support report for node: {}", nodeId);
 
         boolean canReset = (payload[1] & 0x80) != 0;
         int meterTypeIndex = payload[1] & 0x1F;
         int supportedScales = payload[2];
 
         MeterType meterType = MeterType.getMeterType(meterTypeIndex);
-        LOG.debug("Detecting meter scales for node: {} for meterType: {}", nodeId, meterType.getLabel());
+        LOG.debug("Detecting meter scales for node: {} endpoint: {} for meterType: {}", nodeId, endpointId, meterType.getLabel());
 
         List<MeterScale> meterScales = new ArrayList<>();
         for (int i = 0; i < 8; ++i) {
@@ -94,7 +95,7 @@ public class MeterCommandClassHandler implements ZWaveConverter {
                     continue;
                 }
 
-                LOG.debug("Detected Meter scale: {} for Node: {}", scale.getLabel(), nodeId);
+                LOG.debug("Detected Meter scale: {} for Node: {}:{}", scale.getUnit(), nodeId,endpointId);
 
                 // add scale to the list of supported scales.
                 if (!meterScales.contains(scale)) {
@@ -105,7 +106,9 @@ public class MeterCommandClassHandler implements ZWaveConverter {
         String key = nodeId + ":" + endpointId + ":meterTypes";
         nodeManager.setNodeProperty(nodeId, key, meterScales);
 
-        return meterScales.stream().map(m -> new MeterGetAction(nodeId, endpointId, m)).collect(Collectors.toList());
+        List<Event> events =  meterScales.stream().map(m -> new MeterGetAction(nodeId, endpointId, m)).collect(Collectors.toCollection(ArrayList::new));
+        events.add(0, new MeterScalesEvent(nodeId, endpointId, meterScales));
+        return events;
     }
 
     private MeterEvent handleMeterReport(byte[] payload, int nodeId, int endpointId) {

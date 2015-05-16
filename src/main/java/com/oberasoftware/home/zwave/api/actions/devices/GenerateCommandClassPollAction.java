@@ -36,6 +36,7 @@ public class GenerateCommandClassPollAction implements ZWaveDeviceAction, ZWaveI
     public String toString() {
         return "GenerateCommandClassPollAction{" +
                 "nodeId=" + nodeId +
+                ", endpointId=" + endpointId +
                 ", commandClass=" + commandClass +
                 '}';
     }

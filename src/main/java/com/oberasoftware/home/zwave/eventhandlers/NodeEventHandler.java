@@ -11,9 +11,9 @@ import com.oberasoftware.home.zwave.api.actions.devices.GenerateCommandClassPoll
 import com.oberasoftware.home.zwave.api.actions.devices.IdentifyNodeAction;
 import com.oberasoftware.home.zwave.api.actions.devices.MultiInstanceEndpointAction;
 import com.oberasoftware.home.zwave.api.actions.devices.RequestNodeInfoAction;
+import com.oberasoftware.home.zwave.api.events.controller.ControllerInitialDataEvent;
 import com.oberasoftware.home.zwave.api.events.controller.NodeIdentifyEvent;
 import com.oberasoftware.home.zwave.api.events.controller.SendDataEvent;
-import com.oberasoftware.home.zwave.api.events.controller.ControllerInitialDataEvent;
 import com.oberasoftware.home.zwave.api.events.devices.ManufactorInfoEvent;
 import com.oberasoftware.home.zwave.api.events.devices.MultiInstanceDiscoveryEvent;
 import com.oberasoftware.home.zwave.api.events.devices.NodeInfoReceivedEvent;
@@ -59,7 +59,7 @@ public class NodeEventHandler implements EventHandler {
     private Map<String, ScheduledFuture<?>> pollingActions = new ConcurrentHashMap<>();
 
     @EventSubscribe
-    public void receive(ControllerInitialDataEvent event) throws Exception {
+    public void receive(ControllerInitialDataEvent event) {
         LOG.debug("Received a initial controller data with node information: {}", event);
 
         event.getNodeIds().forEach(n -> {
@@ -143,7 +143,7 @@ public class NodeEventHandler implements EventHandler {
             send(() -> new MultiInstanceEndpointAction(event.getNodeId()));
         } else {
             LOG.debug("Scheduling polling tasks for node: {}", event.getNodeId());
-//            scheduleCommandClassPolling(event.getNodeId(), 0, nodeManager.getNode(event.getNodeId()).getCommandClasses());
+            scheduleCommandClassPolling(event.getNodeId(), 0, nodeManager.getNode(event.getNodeId()).getCommandClasses());
         }
 
         int nodeId = event.getNodeId();
