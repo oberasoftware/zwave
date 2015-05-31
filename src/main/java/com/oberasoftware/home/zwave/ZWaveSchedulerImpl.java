@@ -35,7 +35,7 @@ public class ZWaveSchedulerImpl implements ZWaveScheduler {
             } catch (HomeAutomationException e) {
                 LOG.error("", e);
             }
-        }, interval, interval, timeUnit);
+        }, 0l, interval, timeUnit);
 
 
     }

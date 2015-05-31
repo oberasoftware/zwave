@@ -34,6 +34,7 @@ public class MeterEvent implements TransactionEvent, DeviceEvent {
         return nodeId;
     }
 
+    @Override
     public int getEndpointId() {
         return endpointId;
     }

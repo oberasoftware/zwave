@@ -24,6 +24,7 @@ public class MeterScalesEvent implements DeviceEvent, TransactionEvent {
         return nodeId;
     }
 
+    @Override
     public int getEndpointId() {
         return endpointId;
     }

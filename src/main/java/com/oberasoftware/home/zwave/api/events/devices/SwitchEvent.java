@@ -29,6 +29,7 @@ public class SwitchEvent implements DeviceEvent, TransactionEvent {
         return on;
     }
 
+    @Override
     public int getEndpointId() {
         return endpointId;
     }

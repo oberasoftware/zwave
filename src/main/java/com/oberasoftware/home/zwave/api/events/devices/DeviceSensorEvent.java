@@ -27,6 +27,7 @@ public class DeviceSensorEvent implements DeviceEvent {
         return nodeId;
     }
 
+    @Override
     public int getEndpointId() {
         return endpointId;
     }

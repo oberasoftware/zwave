@@ -8,6 +8,10 @@ import com.oberasoftware.home.zwave.api.events.ZWaveEvent;
 public interface DeviceEvent extends ZWaveEvent {
     int getNodeId();
 
+    default int getEndpointId() {
+        return 0;
+    }
+
     default boolean isTriggered() {
         return false;
     }
