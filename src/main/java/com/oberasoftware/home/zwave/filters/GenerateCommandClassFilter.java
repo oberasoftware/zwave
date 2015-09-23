@@ -25,7 +25,7 @@ public class GenerateCommandClassFilter implements EventFilter {
         if(event instanceof GenerateCommandClassPollAction) {
             if(method.isAnnotationPresent(SupportsConversion.class)) {
                 boolean b = checkFilter((GenerateCommandClassPollAction) event, method);
-                LOG.info("Event: {} is filtered: {}", event, b);
+                LOG.debug("Event: {} is filtered: {}", event, b);
                 return b;
 
             }

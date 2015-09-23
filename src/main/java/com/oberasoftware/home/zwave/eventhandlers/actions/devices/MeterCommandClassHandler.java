@@ -159,12 +159,12 @@ public class MeterCommandClassHandler implements ZWaveConverter {
         String key = action.getNodeId() + ":" + action.getEndpointId() + ":meterTypes";
         List<MeterScale> meterTypes = (List<MeterScale>) node.getProperty(key);
         if(meterTypes != null) {
-            LOG.info("We have known supported meter types: {} for node: {} endpoint: {}", meterTypes, action.getNodeId(), action.getEndpointId());
+            LOG.debug("We have known supported meter types: {} for node: {} endpoint: {}", meterTypes, action.getNodeId(), action.getEndpointId());
 
-            LOG.info("Generating meter actions for node: {} and metertypes: {}", action.getNodeId(), meterTypes);
+            LOG.debug("Generating meter actions for node: {} and metertypes: {}", action.getNodeId(), meterTypes);
             return meterTypes.stream().map(m -> new MeterGetAction(action.getNodeId(), action.getEndpointId(), m)).collect(Collectors.toList());
         } else {
-            LOG.info("Retrieving meter types for node: {} endpoint: {}", action.getNodeId(), action.getEndpointId());
+            LOG.debug("Retrieving meter types for node: {} endpoint: {}", action.getNodeId(), action.getEndpointId());
             return generateGetSupportedTypes(action);
         }
 

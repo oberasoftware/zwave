@@ -59,7 +59,7 @@ public class SenderThread extends Thread {
 
                     if (barrier.tryAcquire(1, zWaveResponseTimeout, TimeUnit.MILLISECONDS)) {
                         long responseTime = System.currentTimeMillis() - messageTimeStart;
-                        LOG.info("Response processed after {} ms. for message: {}", responseTime, sendMessage);
+                        LOG.debug("Response processed after {} ms. for message: {}", responseTime, sendMessage);
                     } else {
                         if(sendMessage.getRetries() == 0) {
                             sendMessage.incrementRetry();
