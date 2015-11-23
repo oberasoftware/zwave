@@ -9,25 +9,7 @@
     </appender>
 
 
-    <logger name="com.oberasoftware" level="error"/>
-    <logger name="com.oberasoftware.home.zwave.LocalZwaveSessionTest" level="info"/>
-    <!--<logger name="com.oberasoftware.home.zwave.core.impl.EventBusImpl" level="debug"/>-->
-
-    <!--<logger name="com.oberasoftware.home.zwave.rules" level="debug"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.threading" level="error"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.filters" level="error"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage" level="error"/>-->
-    <!--<logger name="com.oberasoftware.base.event.impl.HandlerEntryImpl" level="error"/>-->
-    <!--<logger name="com.oberasoftware.base.event.impl.LocalEventBus" level="error"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.TransactionManagerImpl" level="error"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.core.utils" level="error"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.converter" level="info"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.converter.controller.ApplicationUpdateCommandConverter" level="debug"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.converter.events.VersionConverter" level="debug"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.handlers.ApplicationCommandHandler" level="debug"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.handlers.NodeEventHandler" level="debug"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.handlers.WakeUpHandler" level="info"/>-->
-    <!--<logger name="com.oberasoftware.home.zwave.handlers.MainEventHandler" level="debug"/>-->
+    <logger name="com.oberasoftware" level="info"/>
     <logger name="org.springframework" level="info"/>
 
     <root level="OFF">

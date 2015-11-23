@@ -4,20 +4,17 @@ import com.oberasoftware.home.zwave.api.ControllerConnector;
 import com.oberasoftware.home.zwave.api.messages.ZWaveRawMessage;
 import com.oberasoftware.home.zwave.core.utils.IOSupplier;
 import com.oberasoftware.home.zwave.exceptions.RuntimeAutomationException;
+import com.oberasoftware.home.zwave.exceptions.ZWaveConfigurationException;
 import com.oberasoftware.home.zwave.exceptions.ZWaveException;
 import com.oberasoftware.home.zwave.threading.ReceiverThread;
 import com.oberasoftware.home.zwave.threading.SenderThread;
-import gnu.io.CommPort;
-import gnu.io.CommPortIdentifier;
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
+import gnu.io.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PreDestroy;
 import java.io.IOException;
@@ -34,7 +31,7 @@ import static com.oberasoftware.home.zwave.ZWAVE_CONSTANTS.ZWAVE_RECEIVE_TIMEOUT
 public class SerialZWaveConnector implements ControllerConnector {
     private static final Logger LOG = LoggerFactory.getLogger(SerialZWaveConnector.class);
 
-    @Value("${zwave.serial.port}")
+    @Value("${zwave.serial.port:}")
     private String portName;
 
     private SerialPort serialPort;
@@ -53,6 +50,10 @@ public class SerialZWaveConnector implements ControllerConnector {
      * @throws ZWaveException if unable to connect to the serial device
      */
     public synchronized void connect() throws ZWaveException {
+        if(StringUtils.isEmpty(portName)) {
+            throw new ZWaveConfigurationException("No port configured for ZWave");
+        }
+
         if(!isConnected) {
             LOG.info("Connecting to ZWave serial port device: {}", portName);
             try {
